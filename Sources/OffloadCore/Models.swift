@@ -30,6 +30,8 @@ public struct OffloadOptions: Sendable {
     /// Margen mínimo en el disco interno del Mac: Fotos almacena allí temporalmente los
     /// originales que descarga de iCloud. Si baja de esto, la copia se detiene (se puede reanudar).
     public var minimumInternalFreeBytes: Int64 = 3 * 1024 * 1024 * 1024
+    /// Si no hay conexión útil durante este tiempo, se detienen todas las copias y borrados.
+    public var networkStopTimeout: TimeInterval = 60
 
     public init(destination: URL) { self.destination = destination }
 }
@@ -83,7 +85,9 @@ public struct OffloadSummary: Sendable, Equatable {
     public var bytesCopied: Int64 = 0
     public var bytesDeleted: Int64 = 0
     public var cancelled = false
+    public var stopReason: StopReason?
     public var fatalError: String?
+    public var fatalErrorDetail: String?
     public init() {}
 
     public var processed: Int { copied + failed }
@@ -91,9 +95,92 @@ public struct OffloadSummary: Sendable, Equatable {
 
 public enum LogLevel: String, Sendable { case info, success, warning, error }
 
+// MARK: - Progreso por elemento
+
+public enum ItemPhase: Sendable, Equatable {
+    case downloading
+    case verifying
+    case retrying(attempt: Int)
+    case waitingForNetwork
+}
+
+public struct ItemProgress: Sendable, Equatable {
+    public var id: String
+    /// 0…1, o nil si todavía no se conoce el tamaño.
+    public var fraction: Double?
+    public var bytes: Int64
+    public var expectedBytes: Int64?
+    public var phase: ItemPhase
+
+    public init(id: String, fraction: Double?, bytes: Int64, expectedBytes: Int64?, phase: ItemPhase) {
+        self.id = id
+        self.fraction = fraction
+        self.bytes = bytes
+        self.expectedBytes = expectedBytes
+        self.phase = phase
+    }
+}
+
+public enum ItemResult: Sendable, Equatable {
+    case success(bytes: Int64, files: Int)
+    case failure(ErrorInfo)
+    case cancelled
+}
+
+// MARK: - Red
+
+public struct NetworkState: Sendable, Equatable {
+    /// El Mac tiene una ruta de red (Wi-Fi/Ethernet) utilizable.
+    public var reachable = true
+    /// Hay ruta, pero las descargas de iCloud fallan por red de forma continuada.
+    public var failing = false
+    /// Se han detectado cortes o fallos repetidos en los últimos minutos.
+    public var unstable = false
+    /// Desde cuándo no hay conexión útil (sin ruta o fallando).
+    public var offlineSince: Date?
+    /// Momento en que se detendrá todo si la conexión no vuelve.
+    public var stopDeadline: Date?
+    public init() {}
+
+    public var isOffline: Bool { offlineSince != nil }
+}
+
+// MARK: - Detención
+
+public enum StopReason: Sendable, Equatable {
+    case user
+    case networkLost
+}
+
+public struct StopProgress: Sendable, Equatable {
+    public var reason: StopReason
+    public var startedAt: Date
+    /// Operaciones en curso cuando se pidió detener.
+    public var total: Int
+    /// Operaciones que aún no han terminado.
+    public var remaining: Int
+    /// Un lote de borrado está esperando la respuesta de Fotos (no se puede interrumpir).
+    public var deletionInProgress: Bool
+
+    public var fraction: Double { total == 0 ? 1 : Double(total - remaining) / Double(total) }
+
+    public init(reason: StopReason, startedAt: Date, total: Int, remaining: Int, deletionInProgress: Bool) {
+        self.reason = reason
+        self.startedAt = startedAt
+        self.total = total
+        self.remaining = remaining
+        self.deletionInProgress = deletionInProgress
+    }
+}
+
 public enum OffloadEvent: Sendable {
-    case log(LogLevel, String)
+    case log(LogLevel, String, detail: String? = nil)
     case progress(OffloadSummary)
+    case itemStarted(id: String, name: String)
+    case itemProgress(ItemProgress)
+    case itemFinished(id: String, result: ItemResult)
+    case network(NetworkState)
+    case stopping(StopProgress)
     case finished(OffloadSummary)
 }
 
@@ -106,6 +193,7 @@ public enum OffloadError: LocalizedError {
     case emptyResource(String)
     case verificationFailed(String)
     case lowDiskSpace(Int64)
+    case networkLost(TimeInterval)
 
     public var errorDescription: String? {
         switch self {
@@ -127,6 +215,8 @@ public enum OffloadError: LocalizedError {
         case .lowDiskSpace(let bytes):
             let s = ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)
             return "Espacio insuficiente en el disco destino (quedan \(s))."
+        case .networkLost(let seconds):
+            return "Se detuvo todo porque no hubo conexión a internet durante más de \(Int(seconds)) segundos. Lo ya copiado y verificado está a salvo en el disco; vuelve a iniciar cuando la conexión sea estable y continuará donde se quedó."
         }
     }
 }

@@ -15,6 +15,8 @@ struct ContentView: View {
 
     var body: some View {
         Form {
+            if vm.isStopping, let sp = vm.stopProgress { StopSection(stop: sp) }
+            if vm.isRunning, vm.network.isOffline || vm.network.unstable { NetworkSection(network: vm.network) }
             destinationSection
             selectionSection
             optionsSection
@@ -26,7 +28,7 @@ struct ContentView: View {
         .navigationSubtitle(statusSubtitle)
         .toolbar { toolbarContent }
         .inspector(isPresented: $showActivity) {
-            ActivityLogView(logs: vm.logs)
+            ActivityLogView(logs: vm.logs, activeItems: vm.activeItems)
                 .inspectorColumnWidth(min: 280, ideal: 360, max: 560)
         }
         .frame(minWidth: 620, minHeight: 640)
@@ -44,9 +46,14 @@ struct ContentView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .primaryAction) {
-            if vm.isRunning {
+            if vm.isStopping {
+                Button {} label: {
+                    Label("Deteniendo…", systemImage: "hourglass").labelStyle(.titleAndIcon)
+                }
+                .disabled(true)
+            } else if vm.isRunning {
                 Button(role: .cancel) { vm.cancel() } label: {
-                    Label("Detener", systemImage: "stop.fill")
+                    Label("Detener", systemImage: "stop.fill").labelStyle(.titleAndIcon)
                 }
                 .help("Detiene el proceso. Lo ya verificado queda registrado y no se borra nada más.")
             } else {
@@ -83,9 +90,12 @@ struct ContentView: View {
 
     private var statusSubtitle: String {
         let s = vm.summary
+        if vm.isStopping { return "Deteniendo…" }
         if vm.isRunning {
+            if vm.network.isOffline { return "Sin conexión a internet" }
             return s.pending > 0 ? "Copiando \(s.processed) de \(s.pending)…" : "Preparando…"
         }
+        if s.stopReason == .networkLost { return "Detenido por falta de conexión" }
         if s.cancelled { return "Detenido" }
         if s.fatalError != nil { return "Error" }
         if s.processed > 0 || s.deleted > 0 { return "Terminado" }
@@ -204,7 +214,11 @@ struct ContentView: View {
                 ProgressView("Leyendo la fototeca…").controlSize(.small)
             }
             if let err = s.fatalError {
-                Label(err, systemImage: "xmark.octagon.fill").foregroundStyle(.red)
+                VStack(alignment: .leading, spacing: 4) {
+                    Label(err, systemImage: s.stopReason == .networkLost ? "wifi.exclamationmark" : "xmark.octagon.fill")
+                        .foregroundStyle(.red)
+                    if let detail = s.fatalErrorDetail { TechnicalDetail(text: detail) }
+                }
             }
             Grid(alignment: .leading, horizontalSpacing: 28, verticalSpacing: 10) {
                 GridRow {
@@ -290,54 +304,6 @@ struct ContentView: View {
     }
 
     private func bytes(_ n: Int64) -> String { ByteCountFormatter.string(fromByteCount: n, countStyle: .file) }
-}
-
-// MARK: - Registro de actividad (inspector)
-
-struct ActivityLogView: View {
-    let logs: [LogEntry]
-
-    var body: some View {
-        Group {
-            if logs.isEmpty {
-                ContentUnavailableView("Sin actividad", systemImage: "list.bullet.rectangle",
-                                       description: Text("Aquí verás cada archivo copiado, verificado y borrado."))
-            } else {
-                ScrollViewReader { proxy in
-                    List(logs) { entry in
-                        Label {
-                            Text(entry.message).font(.callout).textSelection(.enabled)
-                        } icon: {
-                            Image(systemName: symbol(for: entry.level)).foregroundStyle(color(for: entry.level))
-                        }
-                        .id(entry.id)
-                    }
-                    .onChange(of: logs.count) {
-                        if let last = logs.last { proxy.scrollTo(last.id, anchor: .bottom) }
-                    }
-                }
-            }
-        }
-        .navigationTitle("Actividad")
-    }
-
-    private func symbol(for level: LogLevel) -> String {
-        switch level {
-        case .info: return "info.circle"
-        case .success: return "checkmark.circle.fill"
-        case .warning: return "exclamationmark.triangle.fill"
-        case .error: return "xmark.octagon.fill"
-        }
-    }
-
-    private func color(for level: LogLevel) -> Color {
-        switch level {
-        case .info: return .secondary
-        case .success: return .green
-        case .warning: return .orange
-        case .error: return .red
-        }
-    }
 }
 
 // MARK: - Liquid Glass con compatibilidad hacia atrás

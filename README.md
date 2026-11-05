@@ -34,6 +34,22 @@ En la interfaz aparece como «Registro de copias». Es el archivo `Destino/.iclo
 - **Solo se admiten discos externos físicos** (USB, Thunderbolt, tarjeta SD). Se rechazan el disco de arranque, cualquier carpeta del disco interno, las imágenes de disco (`.dmg`, que en realidad ocupan el disco interno) y las unidades de red. El selector de carpetas lo impide y el motor lo vuelve a comprobar antes y durante la copia (si el disco se desconecta, se detiene).
 - Se detiene si quedan menos de 2 GB libres en el disco externo, o menos de 3 GB en el disco interno: Fotos guarda allí temporalmente los originales que descarga de iCloud. Se puede reanudar después.
 - Las fechas del filtro no pueden ser futuras ni anteriores a 1900, y «Desde» nunca es posterior a «Hasta».
+- Al empezar se eliminan los temporales `.partial` que hubiera dejado una ejecución interrumpida.
+
+## Red
+
+La app vigila la conexión durante todo el proceso (`NWPathMonitor` + resultado de las descargas):
+
+- **Sin conexión** (el Mac pierde la red): las descargas nuevas quedan en espera y aparece un aviso con cuenta atrás.
+- **La red está fallando**: hay red, pero las descargas de iCloud fallan, o todas las descargas en curso llevan más de 20 s sin recibir ningún dato (descarga atascada).
+- **Conexión inestable**: dos o más cortes o fallos en 3 minutos. Las descargas que fallen se reintentan.
+- Si pasa **más de 1 minuto sin conexión útil**, se detienen todas las copias y borrados. Lo ya verificado se conserva y la próxima ejecución continúa donde se quedó.
+
+## Mensajes y progreso
+
+- Cada error se muestra en lenguaje coloquial, con un botón «Mostrar detalles técnicos» (dominio, código y nombre del error, p. ej. `PHPhotosErrorDomain 3169 (networkError)`) que se puede copiar.
+- En el panel de actividad, cada elemento que se está copiando tiene su propia barra de progreso: descarga desde iCloud, copia, verificación, reintento o espera de red.
+- Al detener (manualmente o por falta de red) aparece una barra con las operaciones en curso que faltan por terminar y el tiempo estimado.
 - Reintenta cada elemento hasta 3 veces; si falla, no se borra.
 - Al cancelar no se borra nada más.
 - Si rechazas el diálogo de borrado de macOS, el borrado se desactiva y la copia sigue.
@@ -68,6 +84,8 @@ Sources/OffloadCore/      lógica (sin UI)
   PathBuilder.swift       nombres de archivo y carpetas, sin colisiones
   VolumeInfo.swift        solo discos externos físicos + espacio libre
   DateRange.swift         reglas de fechas realistas
+  NetworkMonitor.swift    vigilancia de red, atascos y parada al minuto
+  ErrorDescriber.swift    errores en lenguaje coloquial + detalle técnico
 Sources/iCloudOffload/    interfaz SwiftUI
 Tests/OffloadCoreTests/   pruebas unitarias
 ```

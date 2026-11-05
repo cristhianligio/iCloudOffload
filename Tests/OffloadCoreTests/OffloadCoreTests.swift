@@ -146,3 +146,101 @@ private func tempDir() throws -> URL {
         print("VOLCHECK \(p) → \(v.eligibility) internal=\(String(describing: v.isInternal)) diskImage=\(v.isDiskImage) local=\(String(describing: v.isLocal)) format=\(v.format ?? "?")")
     }
 }
+
+// MARK: - Mensajes de error
+
+@Test func photosNetworkErrorIsExplainedInPlainLanguage() {
+    let err = NSError(domain: "PHPhotosErrorDomain", code: 3169,
+                      userInfo: [NSLocalizedDescriptionKey: "No se ha podido completar la operación."])
+    let info = ErrorDescriber.describe(err)
+    #expect(info.isNetwork)
+    #expect(info.friendly.contains("conexión a internet"))
+    #expect(!info.friendly.contains("3169"))
+    #expect(info.technical.contains("PHPhotosErrorDomain 3169 (networkError)"))
+}
+
+@Test func underlyingErrorIsUsedWhenTopLevelIsUnknown() {
+    let inner = NSError(domain: NSPOSIXErrorDomain, code: Int(ENOSPC))
+    let outer = NSError(domain: "AlgoRaro", code: 7, userInfo: [NSUnderlyingErrorKey: inner])
+    let info = ErrorDescriber.describe(outer)
+    #expect(info.friendly.contains("se ha llenado"))
+    #expect(info.technical.contains("AlgoRaro 7"))
+    #expect(info.technical.contains("ENOSPC"))
+}
+
+@Test func unknownErrorStillHasFriendlyText() {
+    let info = ErrorDescriber.describe(NSError(domain: "X", code: 1))
+    #expect(info.friendly.contains("No se borró nada"))
+    #expect(info.technical.hasPrefix("X 1"))
+}
+
+// MARK: - Red
+
+@Test func stopsAfterOneMinuteWithoutNetwork() {
+    var h = NetworkHealth(stopAfter: 60)
+    let t0 = Date(timeIntervalSince1970: 1_000_000)
+    h.pathChanged(reachable: false, at: t0)
+    #expect(h.state(at: t0).isOffline)
+    #expect(h.state(at: t0).stopDeadline == t0.addingTimeInterval(60))
+    #expect(!h.shouldStop(at: t0.addingTimeInterval(59)))
+    #expect(h.shouldStop(at: t0.addingTimeInterval(60)))
+}
+
+@Test func reconnectionCancelsTheCountdown() {
+    var h = NetworkHealth(stopAfter: 60)
+    let t0 = Date(timeIntervalSince1970: 1_000_000)
+    h.pathChanged(reachable: false, at: t0)
+    h.pathChanged(reachable: true, at: t0.addingTimeInterval(30))
+    #expect(!h.shouldStop(at: t0.addingTimeInterval(90)))
+    #expect(!h.state(at: t0.addingTimeInterval(90)).isOffline)
+}
+
+@Test func failingDownloadsCountAsNoConnection() {
+    var h = NetworkHealth(stopAfter: 60)
+    let t0 = Date(timeIntervalSince1970: 1_000_000)
+    h.networkError(at: t0)
+    #expect(h.state(at: t0).failing)
+    #expect(h.shouldStop(at: t0.addingTimeInterval(61)))
+    h.networkSuccess(at: t0.addingTimeInterval(10))
+    #expect(!h.shouldStop(at: t0.addingTimeInterval(61)))
+}
+
+@Test func repeatedDropsMarkConnectionUnstable() {
+    var h = NetworkHealth(stopAfter: 60)
+    let t0 = Date(timeIntervalSince1970: 1_000_000)
+    h.pathChanged(reachable: false, at: t0)
+    h.pathChanged(reachable: true, at: t0.addingTimeInterval(5))
+    #expect(!h.state(at: t0.addingTimeInterval(6)).unstable)
+    h.pathChanged(reachable: false, at: t0.addingTimeInterval(40))
+    h.pathChanged(reachable: true, at: t0.addingTimeInterval(45))
+    #expect(h.state(at: t0.addingTimeInterval(50)).unstable)
+    // Pasada la ventana de 3 minutos, deja de considerarse inestable
+    #expect(!h.state(at: t0.addingTimeInterval(400)).unstable)
+}
+
+// MARK: - Progreso
+
+@Test func exportProgressUsesBestEstimate() {
+    #expect(ExportProgress(downloadFraction: 0.4, bytesWritten: 0, expectedBytes: 100).fraction == 0.4)
+    #expect(ExportProgress(downloadFraction: nil, bytesWritten: 50, expectedBytes: 100).fraction == 0.5)
+    #expect(ExportProgress(downloadFraction: nil, bytesWritten: 50, expectedBytes: nil).fraction == nil)
+}
+
+@Test func stopProgressFraction() {
+    let sp = StopProgress(reason: .user, startedAt: Date(), total: 4, remaining: 1, deletionInProgress: false)
+    #expect(sp.fraction == 0.75)
+    #expect(StopProgress(reason: .user, startedAt: Date(), total: 0, remaining: 0, deletionInProgress: false).fraction == 1)
+}
+
+@Test func silentStalledDownloadCountsAsNoConnection() {
+    var h = NetworkHealth(stopAfter: 60)
+    let t0 = Date(timeIntervalSince1970: 1_000_000)
+    h.downloadStarted(at: t0)
+    #expect(!h.state(at: t0.addingTimeInterval(10)).isOffline)   // margen de gracia
+    #expect(h.state(at: t0.addingTimeInterval(25)).isOffline)    // atascada
+    #expect(h.shouldStop(at: t0.addingTimeInterval(60)))
+    h.activity(at: t0.addingTimeInterval(30))                     // llegan datos
+    #expect(!h.shouldStop(at: t0.addingTimeInterval(60)))
+    h.downloadEnded(at: t0.addingTimeInterval(31))
+    #expect(!h.state(at: t0.addingTimeInterval(500)).isOffline)  // sin descargas no hay atasco
+}

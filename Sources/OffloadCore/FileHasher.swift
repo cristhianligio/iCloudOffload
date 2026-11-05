@@ -24,6 +24,8 @@ public enum FileHasher {
                 throw POSIXError(POSIXErrorCode(rawValue: errno) ?? .EIO)
             }
             if n == 0 { break }
+            // Permite detener rápido la verificación de archivos grandes.
+            if Task.isCancelled { throw CancellationError() }
             hasher.update(bufferPointer: UnsafeRawBufferPointer(start: buffer, count: n))
             total += Int64(n)
         }

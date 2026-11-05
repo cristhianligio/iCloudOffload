@@ -9,16 +9,45 @@ public struct ExportedFile: Sendable {
     public var sha256: String
 }
 
-/// Escribe los bytes recibidos y calcula el hash a la vez.
+public struct ExportProgress: Sendable {
+    /// Progreso de la descarga desde iCloud (solo si el original no estaba en el Mac).
+    public var downloadFraction: Double?
+    public var bytesWritten: Int64
+    public var expectedBytes: Int64?
+
+    /// Mejor estimación disponible de 0…1 para este recurso.
+    public var fraction: Double? {
+        var best: Double?
+        if let d = downloadFraction { best = d }
+        if let e = expectedBytes, e > 0 {
+            let w = min(1, Double(bytesWritten) / Double(e))
+            best = max(best ?? 0, w)
+        }
+        return best
+    }
+}
+
+/// Escribe los bytes recibidos, calcula el hash a la vez y lleva la cuenta del progreso.
 private final class StreamWriter: @unchecked Sendable {
     private let lock = NSLock()
     private let handle: FileHandle
     private var hasher = SHA256()
     private var size: Int64 = 0
     private var failure: Error?
+    private var downloadFraction: Double?
+    private var lastReport = Date.distantPast
+    private let expectedBytes: Int64?
+    private let report: (@Sendable (ExportProgress) -> Void)?
+    private let onNetworkProgress: (@Sendable () -> Void)?
     var onFailure: (() -> Void)?
 
-    init(handle: FileHandle) { self.handle = handle }
+    init(handle: FileHandle, expectedBytes: Int64?,
+         report: (@Sendable (ExportProgress) -> Void)?, onNetworkProgress: (@Sendable () -> Void)?) {
+        self.handle = handle
+        self.expectedBytes = expectedBytes
+        self.report = report
+        self.onNetworkProgress = onNetworkProgress
+    }
 
     func consume(_ data: Data) {
         let failedNow: Bool = lock.withLock {
@@ -33,8 +62,28 @@ private final class StreamWriter: @unchecked Sendable {
                 return true
             }
         }
-        if failedNow { onFailure?() }
+        if failedNow { onFailure?() } else { onNetworkProgress?(); maybeReport() }
     }
+
+    func downloadProgress(_ p: Double) {
+        lock.withLock { downloadFraction = p }
+        onNetworkProgress?()
+        maybeReport()
+    }
+
+    /// Como mucho 5 avisos por segundo para no saturar la interfaz.
+    private func maybeReport(force: Bool = false) {
+        guard let report else { return }
+        let snapshot: ExportProgress? = lock.withLock {
+            let now = Date()
+            guard force || now.timeIntervalSince(lastReport) >= 0.2 else { return nil }
+            lastReport = now
+            return ExportProgress(downloadFraction: downloadFraction, bytesWritten: size, expectedBytes: expectedBytes)
+        }
+        if let snapshot { report(snapshot) }
+    }
+
+    func finalReport() { maybeReport(force: true) }
 
     func result() throws -> (String, Int64) {
         try lock.withLock {
@@ -65,10 +114,21 @@ private final class RequestBox: @unchecked Sendable {
 }
 
 public enum ResourceExporter {
+    /// Tamaño del archivo según Fotos, si lo expone (propiedad no documentada; se consulta de forma segura).
+    public static func expectedSize(of resource: PHAssetResource) -> Int64? {
+        guard resource.responds(to: NSSelectorFromString("fileSize")) else { return nil }
+        let value = (resource.value(forKey: "fileSize") as? NSNumber)?.int64Value
+        return (value ?? 0) > 0 ? value : nil
+    }
+
     /// Descarga (si hace falta, desde iCloud) el recurso original y lo escribe en `finalURL`.
     /// Escribe primero a un archivo temporal oculto, fuerza el vaciado a disco y luego renombra,
     /// para que nunca quede un archivo final a medias.
-    public static func export(_ resource: PHAssetResource, to finalURL: URL) async throws -> ExportedFile {
+    public static func export(
+        _ resource: PHAssetResource, to finalURL: URL,
+        progress: (@Sendable (ExportProgress) -> Void)? = nil,
+        onNetworkProgress: (@Sendable () -> Void)? = nil
+    ) async throws -> ExportedFile {
         let fm = FileManager.default
         let tmp = finalURL.deletingLastPathComponent()
             .appendingPathComponent(".\(UUID().uuidString).partial")
@@ -81,12 +141,14 @@ public enum ResourceExporter {
             // Sin caché: la verificación posterior leerá desde el disco físico.
             _ = fcntl(handle.fileDescriptor, F_NOCACHE, 1)
 
-            let writer = StreamWriter(handle: handle)
+            let writer = StreamWriter(handle: handle, expectedBytes: expectedSize(of: resource),
+                                      report: progress, onNetworkProgress: onNetworkProgress)
             let box = RequestBox()
             writer.onFailure = { box.cancel() }
 
             let options = PHAssetResourceRequestOptions()
             options.isNetworkAccessAllowed = true  // descarga el original de iCloud si no está local
+            options.progressHandler = { p in writer.downloadProgress(p) }
 
             do {
                 try await withTaskCancellationHandler {
@@ -106,9 +168,10 @@ public enum ResourceExporter {
                 try? handle.close()
                 // Prioriza el error de escritura (p. ej. disco lleno) sobre el de cancelación.
                 _ = try writer.result()
-                throw error
+                throw Task.isCancelled ? CancellationError() : error
             }
             try Task.checkCancellation()
+            writer.finalReport()
 
             let (digest, size) = try writer.result()
             // F_FULLFSYNC garantiza que los datos llegaron al medio físico; algunos formatos (exFAT) no lo soportan.

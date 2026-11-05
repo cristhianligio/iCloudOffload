@@ -8,11 +8,16 @@ public enum Verifier {
     }
 
     /// Re-verifica todos los archivos de un elemento registrado en el manifiesto.
-    public static func verify(record: AssetRecord, root: URL) -> Bool {
+    /// Lanza `CancellationError` si se detiene el proceso; cualquier otro fallo cuenta como «no coincide».
+    public static func verify(record: AssetRecord, root: URL) throws -> Bool {
         guard !record.resources.isEmpty else { return false }
         for r in record.resources {
             let url = root.appendingPathComponent(r.relativePath)
-            guard (try? verify(file: url, expectedSHA256: r.sha256, expectedSize: r.size)) == true else {
+            do {
+                guard try verify(file: url, expectedSHA256: r.sha256, expectedSize: r.size) else { return false }
+            } catch is CancellationError {
+                throw CancellationError()
+            } catch {
                 return false
             }
         }
