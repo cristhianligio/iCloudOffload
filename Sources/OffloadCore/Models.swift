@@ -25,9 +25,11 @@ public struct OffloadOptions: Sendable {
     /// Cada lote muestra un diálogo de confirmación del sistema.
     public var deleteBatchSize: Int = 100
     public var maxConcurrentExports: Int = 3
-    public var requireExternalVolume: Bool = true
     /// Margen mínimo de espacio libre en el disco destino.
     public var minimumFreeBytes: Int64 = 2 * 1024 * 1024 * 1024
+    /// Margen mínimo en el disco interno del Mac: Fotos almacena allí temporalmente los
+    /// originales que descarga de iCloud. Si baja de esto, la copia se detiene (se puede reanudar).
+    public var minimumInternalFreeBytes: Int64 = 3 * 1024 * 1024 * 1024
 
     public init(destination: URL) { self.destination = destination }
 }
@@ -96,8 +98,8 @@ public enum OffloadEvent: Sendable {
 }
 
 public enum OffloadError: LocalizedError {
-    case destinationNotExternal(String)
-    case destinationReadOnly
+    case destinationNotEligible(String)
+    case lowInternalSpace(Int64)
     case notAuthorized
     case limitedAccess
     case noResources
@@ -107,10 +109,11 @@ public enum OffloadError: LocalizedError {
 
     public var errorDescription: String? {
         switch self {
-        case .destinationNotExternal(let name):
-            return "El destino «\(name)» no es un disco externo."
-        case .destinationReadOnly:
-            return "El disco destino es de solo lectura."
+        case .destinationNotEligible(let reason):
+            return reason
+        case .lowInternalSpace(let bytes):
+            let s = ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)
+            return "Queda poco espacio en el disco interno del Mac (\(s)). Fotos lo necesita para descargar temporalmente los originales de iCloud. Libera espacio y vuelve a iniciar: se reanudará donde se quedó."
         case .notAuthorized:
             return "Sin permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos."
         case .limitedAccess:

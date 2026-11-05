@@ -40,6 +40,18 @@ public actor Manifest {
         return out
     }
 
+    public static func fileURL(in directory: URL) -> URL {
+        directory.appendingPathComponent(".icloud-offload/manifest.jsonl")
+    }
+
+    /// Resumen rápido para la interfaz: elementos registrados y cuántos ya se borraron de iCloud.
+    /// `nil` si todavía no existe un registro en esa carpeta.
+    public static func summary(in directory: URL) -> (records: Int, deleted: Int)? {
+        let url = fileURL(in: directory)
+        guard FileManager.default.fileExists(atPath: url.path), let recs = try? load(url) else { return nil }
+        return (recs.count, recs.values.filter { $0.deletedAt != nil }.count)
+    }
+
     public func record(for id: String) -> AssetRecord? { records[id] }
     public var count: Int { records.count }
 

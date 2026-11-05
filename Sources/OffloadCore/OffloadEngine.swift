@@ -54,11 +54,12 @@ public final class OffloadEngine: @unchecked Sendable {
 
         // 1. Disco destino
         let volume = try VolumeInfo.inspect(dest)
-        if options.requireExternalVolume && !volume.isExternal {
-            throw OffloadError.destinationNotExternal(volume.name ?? dest.path)
-        }
-        if volume.isReadOnly { throw OffloadError.destinationReadOnly }
+        let eligibility = volume.eligibility
+        guard eligibility.isEligible else { throw OffloadError.destinationNotEligible(eligibility.message) }
         log(.info, "Destino: \(dest.path) (\(volume.name ?? "?"), \(volume.format ?? "formato desconocido"))")
+        if let free = VolumeInfo.internalAvailableBytes(), free < options.minimumInternalFreeBytes {
+            throw OffloadError.lowInternalSpace(free)
+        }
 
         // 2. Permisos
         switch await PhotoLibrary.requestAuthorization() {
@@ -107,9 +108,22 @@ public final class OffloadEngine: @unchecked Sendable {
             var next = 0
             func canStartMore() -> Bool {
                 guard !Task.isCancelled, !lowSpace, next < pending.count else { return false }
-                if let free = (try? VolumeInfo.inspect(dest))?.availableBytes, free < options.minimumFreeBytes {
+                // El disco externo sigue conectado y sigue siendo válido
+                guard let vol = try? VolumeInfo.inspect(dest), vol.eligibility.isEligible,
+                      FileManager.default.fileExists(atPath: dest.path) else {
+                    lowSpace = true
+                    log(.error, "El disco destino ya no está disponible (¿se desconectó?). Se detiene la copia; no se borra nada pendiente.")
+                    return false
+                }
+                if let free = vol.availableBytes, free < options.minimumFreeBytes {
                     lowSpace = true
                     log(.error, OffloadError.lowDiskSpace(free).localizedDescription + " Se detiene la copia.")
+                    return false
+                }
+                // Fotos guarda temporalmente en el disco interno lo que descarga de iCloud
+                if let free = VolumeInfo.internalAvailableBytes(), free < options.minimumInternalFreeBytes {
+                    lowSpace = true
+                    log(.error, OffloadError.lowInternalSpace(free).localizedDescription + " Se detiene la copia.")
                     return false
                 }
                 return true

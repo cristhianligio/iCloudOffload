@@ -20,12 +20,20 @@ Requisitos: macOS 14+, Xcode o Command Line Tools con Swift 5.10+. Pruebas: `swi
 3. **Verificación**: el SHA-256 se calcula mientras llegan los bytes desde Fotos; después se **relee el archivo desde el disco** (sin caché, `F_NOCACHE`) y se compara hash y tamaño.
 4. **Borrado** (opcional, desactivado por defecto): los elementos verificados se acumulan y se borran **en lotes** mientras la copia continúa, así el espacio se va liberando durante el proceso. Justo antes de cada lote se vuelven a verificar los archivos.
 
-Todo queda registrado en `Destino/.icloud-offload/manifest.jsonl` (identificador, rutas, tamaños, hashes, fecha de verificación y de borrado). Gracias a eso **se puede reanudar**: lo ya copiado no se vuelve a copiar.
+## Registro de copias (manifiesto)
+
+En la interfaz aparece como «Registro de copias». Es el archivo `Destino/.icloud-offload/manifest.jsonl`, con una línea JSON por evento: elemento copiado y verificado (archivos, tamaños, SHA-256) o elemento borrado de iCloud (fecha y hora). Sirve para:
+
+- **Reanudar**: lo ya copiado no se vuelve a copiar.
+- **Re-verificar** los archivos antes de borrar nada de iCloud, también en ejecuciones posteriores.
+- **Auditar** qué se borró de iCloud y cuándo, y comprobar en el futuro que las copias no se dañaron.
 
 ## Salvaguardas
 
 - Solo se borra un elemento si **todos** sus archivos están copiados y verificados.
-- El destino debe ser un disco externo; se detiene si quedan menos de 2 GB libres.
+- **Solo se admiten discos externos físicos** (USB, Thunderbolt, tarjeta SD). Se rechazan el disco de arranque, cualquier carpeta del disco interno, las imágenes de disco (`.dmg`, que en realidad ocupan el disco interno) y las unidades de red. El selector de carpetas lo impide y el motor lo vuelve a comprobar antes y durante la copia (si el disco se desconecta, se detiene).
+- Se detiene si quedan menos de 2 GB libres en el disco externo, o menos de 3 GB en el disco interno: Fotos guarda allí temporalmente los originales que descarga de iCloud. Se puede reanudar después.
+- Las fechas del filtro no pueden ser futuras ni anteriores a 1900, y «Desde» nunca es posterior a «Hasta».
 - Reintenta cada elemento hasta 3 veces; si falla, no se borra.
 - Al cancelar no se borra nada más.
 - Si rechazas el diálogo de borrado de macOS, el borrado se desactiva y la copia sigue.
@@ -44,6 +52,10 @@ Todo queda registrado en `Destino/.icloud-offload/manifest.jsonl` (identificador
 
 Haz la primera ejecución **sin** borrado, revisa los archivos en el disco y después vuelve a ejecutarla con el borrado activado: los elementos ya copiados se re-verifican y se borran sin volver a descargarlos. Lo ideal es tener una segunda copia (otro disco) antes de borrar de iCloud.
 
+## Diseño
+
+La interfaz sigue la guía de Apple [Adopting Liquid Glass](https://developer.apple.com/documentation/TechnologyOverviews/adopting-liquid-glass): componentes estándar (formulario agrupado, barra de herramientas, inspector) para que el sistema aplique Liquid Glass, sin fondos personalizados, acción principal en la barra con `.glassProminent`, botones de icono con etiqueta de accesibilidad agrupados con `ToolbarSpacer`, y el registro de actividad en un inspector. En macOS 14–15 se usa el estilo equivalente previo.
+
 ## Estructura
 
 ```
@@ -54,7 +66,8 @@ Sources/OffloadCore/      lógica (sin UI)
   Manifest.swift          registro JSONL para auditar y reanudar
   PhotoLibrary.swift      PhotoKit (permisos, búsqueda, borrado)
   PathBuilder.swift       nombres de archivo y carpetas, sin colisiones
-  VolumeInfo.swift        detección de disco externo y espacio libre
+  VolumeInfo.swift        solo discos externos físicos + espacio libre
+  DateRange.swift         reglas de fechas realistas
 Sources/iCloudOffload/    interfaz SwiftUI
 Tests/OffloadCoreTests/   pruebas unitarias
 ```

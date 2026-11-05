@@ -9,6 +9,7 @@ struct iCloudOffloadApp: App {
         Window("iCloud Offload", id: "main") {
             ContentView()
         }
+        .defaultSize(width: 980, height: 820)
         .windowResizability(.contentMinSize)
     }
 }

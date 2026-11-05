@@ -88,3 +88,61 @@ private func tempDir() throws -> URL {
     #expect(r?.deletedAt != nil)
     #expect(await reloaded.count == 1)
 }
+
+// MARK: - Fechas realistas
+
+@Test func datesCannotBeInTheFuture() {
+    let now = Date()
+    let future = now.addingTimeInterval(86_400 * 30)
+    let (f, t) = DateRangePolicy.clamp(from: now.addingTimeInterval(-86_400), to: future, now: now)
+    #expect(t == now)
+    #expect(f <= t)
+    #expect(DateRangePolicy.toRange(from: f, now: now).upperBound == now)
+    #expect(DateRangePolicy.fromRange(to: future, now: now).upperBound == now)
+}
+
+@Test func fromIsNeverAfterTo() {
+    let now = Date()
+    let to = now.addingTimeInterval(-86_400 * 10)
+    let (f, t) = DateRangePolicy.clamp(from: now.addingTimeInterval(-86_400), to: to, now: now)
+    #expect(f == t)
+}
+
+@Test func datesNotBefore1900() {
+    let ancient = Date(timeIntervalSince1970: -5_000_000_000)  // ~1811
+    let (f, _) = DateRangePolicy.clamp(from: ancient, to: Date())
+    #expect(f == DateRangePolicy.earliest)
+}
+
+@Test func fetchBoundsIncludeWholeLastDay() {
+    var cal = Calendar(identifier: .gregorian); cal.timeZone = TimeZone(identifier: "UTC")!
+    let now = cal.date(from: DateComponents(year: 2026, month: 11, day: 5, hour: 15))!
+    let from = cal.date(from: DateComponents(year: 2026, month: 1, day: 10, hour: 9))!
+    let b = DateRangePolicy.fetchBounds(from: from, to: now, calendar: cal, now: now)
+    #expect(b.start == cal.date(from: DateComponents(year: 2026, month: 1, day: 10)))
+    #expect(b.endExclusive == cal.date(from: DateComponents(year: 2026, month: 11, day: 6)))
+}
+
+// MARK: - Solo discos externos
+
+@Test func bootVolumeIsRejected() throws {
+    #expect(try VolumeInfo.inspect(URL(fileURLWithPath: "/")).eligibility == .bootVolume)
+}
+
+@Test func homeFolderIsRejected() throws {
+    let e = try VolumeInfo.inspect(FileManager.default.homeDirectoryForCurrentUser).eligibility
+    #expect(!e.isEligible)
+}
+
+@Test func tempFolderIsRejected() throws {
+    #expect(try !VolumeInfo.inspect(tempDir()).eligibility.isEligible)
+}
+
+/// Diagnóstico manual: OFFLOAD_CHECK_PATHS="/Volumes/Disco:/otra/ruta" swift test --filter diagnoseVolumes
+@Test func diagnoseVolumes() throws {
+    guard let paths = ProcessInfo.processInfo.environment["OFFLOAD_CHECK_PATHS"] else { return }
+    for p in paths.split(separator: ":") {
+        let v = try VolumeInfo.inspect(URL(fileURLWithPath: String(p)))
+        print("VOLCHECK \(p) → \(v.eligibility) internal=\(String(describing: v.isInternal)) diskImage=\(v.isDiskImage) local=\(String(describing: v.isLocal)) format=\(v.format ?? "?")")
+    }
+}
