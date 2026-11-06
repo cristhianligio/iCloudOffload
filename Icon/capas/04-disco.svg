@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="carcasa" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3A4560"/>
+      <stop offset="1" stop-color="#1D2438"/>
+    </linearGradient>
+  </defs>
+  <rect x="232" y="580" width="560" height="210" rx="56" fill="url(#carcasa)"/>
+  <rect x="300" y="676" width="240" height="24" rx="12" fill="#5C6A8C"/>
+  <circle cx="722" cy="688" r="22" fill="#34C759"/>
+</svg>

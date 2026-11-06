@@ -87,5 +87,7 @@ Sources/OffloadCore/      lógica (sin UI)
   NetworkMonitor.swift    vigilancia de red, atascos y parada al minuto
   ErrorDescriber.swift    errores en lenguaje coloquial + detalle técnico
 Sources/iCloudOffload/    interfaz SwiftUI
+Icon/AppIcon.icon         icono Liquid Glass (ábrelo en Icon Composer para editarlo)
+Icon/capas/               capas SVG originales del icono
 Tests/OffloadCoreTests/   pruebas unitarias
 ```
