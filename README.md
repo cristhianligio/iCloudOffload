@@ -2,6 +2,17 @@
 
 App de macOS (SwiftUI) que **copia** tus fotos y videos de Fotos de iCloud a un disco externo, **verifica** cada archivo con SHA-256 y, si lo autorizas, los **borra** de la fototeca (y por lo tanto de iCloud) para liberar espacio.
 
+![Icono de iCloud Offload](Icon/vista-previa.png)
+
+> [!WARNING]
+> **Úsala bajo tu propio riesgo.** Esta app borra fotos y videos de tu fototeca de iCloud. Las funciones básicas se han probado (copia, verificación, borrado y rechazo de discos internos), pero **no se han hecho pruebas extensas** con fototecas grandes, versiones de macOS distintas ni tipos de discos variados. Puede fallar. Lee el [descargo de responsabilidad](#descargo-de-responsabilidad) antes de usarla.
+
+## Por qué existe
+
+Tengo un MacBook con poco espacio de almacenamiento y el plan básico de iCloud. Con los años, las fotos y los videos llenaron iCloud, y no podía descargarlos al Mac para sacarlos de ahí porque tampoco tenía sitio en el disco interno.
+
+Creé esta app para resolver las dos cosas a la vez: **liberar espacio en iCloud** y tener **copias físicas** de mis fotos y videos en un disco externo. Copia de iCloud al disco externo sin necesidad de descargar toda la fototeca al Mac, verifica cada archivo y solo entonces lo borra de iCloud. Si estás en la misma situación, quizá también te sirva.
+
 ## Compilar y abrir
 
 ```bash
@@ -91,3 +102,18 @@ Icon/AppIcon.icon         icono Liquid Glass (ábrelo en Icon Composer para edit
 Icon/capas/               capas SVG originales del icono
 Tests/OffloadCoreTests/   pruebas unitarias
 ```
+
+## Descargo de responsabilidad
+
+Este es un proyecto personal, publicado tal cual, sin garantías de ningún tipo.
+
+- La app **puede tener errores**. Se han probado las funciones básicas, pero no de forma extensa ni en todas las configuraciones posibles.
+- **No me hago responsable** de la pérdida de fotos, videos u otros datos, ni de ningún daño derivado del uso de esta app.
+- **Antes de borrar nada de iCloud**, comprueba por tu cuenta que las copias en el disco externo se abren correctamente. Lo más prudente es empezar con un rango de fechas pequeño y con «Borrar de iCloud después de verificar» desactivado, revisar las copias y solo después activar el borrado.
+- Los elementos borrados pasan a «Eliminados recientemente» en Fotos durante 30 días: es tu red de seguridad. No vacíes esa carpeta hasta estar seguro de tus copias.
+- Un solo disco externo no es una copia de seguridad completa. Los discos fallan; considera tener una segunda copia.
+- Este proyecto no está afiliado ni respaldado por Apple. iCloud y Fotos son marcas de Apple Inc.
+
+## Licencia
+
+[MIT](LICENSE) © 2026 Cristhian Ramos
