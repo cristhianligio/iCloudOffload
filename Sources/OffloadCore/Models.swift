@@ -5,9 +5,9 @@ public enum MediaFilter: String, CaseIterable, Identifiable, Sendable {
     public var id: String { rawValue }
     public var label: String {
         switch self {
-        case .all: return "Fotos y videos"
-        case .photos: return "Solo fotos"
-        case .videos: return "Solo videos"
+        case .all: return String(localized: "Fotos y videos")
+        case .photos: return String(localized: "Solo fotos")
+        case .videos: return String(localized: "Solo videos")
         }
     }
 }
@@ -60,6 +60,8 @@ public struct AssetRecord: Codable, Sendable, Equatable {
     public var resources: [ResourceRecord]
     public var verifiedAt: Date
     public var deletedAt: Date?
+    /// Firma HMAC-SHA256 de la línea del registro (solo en disco; ver `Manifest`).
+    public var mac: String?
 
     public init(localIdentifier: String, creationDate: Date?, mediaType: String,
                 resources: [ResourceRecord], verifiedAt: Date, deletedAt: Date? = nil) {
@@ -80,6 +82,8 @@ public struct OffloadSummary: Sendable, Equatable {
     public var previouslyCopied = 0
     public var copied = 0
     public var verified = 0
+    /// Copias anteriores sin firma válida que se confirmaron contra iCloud.
+    public var confirmed = 0
     public var failed = 0
     public var deleted = 0
     public var bytesCopied: Int64 = 0
@@ -100,6 +104,8 @@ public enum LogLevel: String, Sendable { case info, success, warning, error }
 public enum ItemPhase: Sendable, Equatable {
     case downloading
     case verifying
+    /// Comparando una copia anterior (de un registro sin firma válida) con el original de iCloud.
+    case confirming
     case retrying(attempt: Int)
     case waitingForNetwork
 }
@@ -123,6 +129,8 @@ public struct ItemProgress: Sendable, Equatable {
 
 public enum ItemResult: Sendable, Equatable {
     case success(bytes: Int64, files: Int)
+    /// Una copia anterior se comprobó contra el original de iCloud y coincide (no hizo falta copiar de nuevo).
+    case confirmed(bytes: Int64, files: Int)
     case failure(ErrorInfo)
     case cancelled
 }
@@ -194,6 +202,7 @@ public enum OffloadError: LocalizedError {
     case verificationFailed(String)
     case lowDiskSpace(Int64)
     case networkLost(TimeInterval)
+    case unsafePath(String)
 
     public var errorDescription: String? {
         switch self {
@@ -201,22 +210,24 @@ public enum OffloadError: LocalizedError {
             return reason
         case .lowInternalSpace(let bytes):
             let s = ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)
-            return "Queda poco espacio en el disco interno del Mac (\(s)). Fotos lo necesita para descargar temporalmente los originales de iCloud. Libera espacio y vuelve a iniciar: se reanudará donde se quedó."
+            return String(localized: "Queda poco espacio en el disco interno del Mac (\(s)). Fotos lo necesita para descargar temporalmente los originales de iCloud. Libera espacio y vuelve a iniciar: se reanudará donde se quedó.")
         case .notAuthorized:
-            return "Sin permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos."
+            return String(localized: "Sin permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos.")
         case .limitedAccess:
-            return "El acceso a Fotos es limitado. Concede acceso completo para procesar toda la fototeca."
+            return String(localized: "El acceso a Fotos es limitado. Concede acceso completo para procesar toda la fototeca.")
         case .noResources:
-            return "El elemento no tiene recursos exportables."
+            return String(localized: "El elemento no tiene recursos exportables.")
         case .emptyResource(let name):
-            return "Se recibió un archivo vacío: \(name)."
+            return String(localized: "Se recibió un archivo vacío: \(name).")
         case .verificationFailed(let name):
-            return "La verificación SHA-256 falló para \(name)."
+            return String(localized: "La verificación SHA-256 falló para \(name).")
         case .lowDiskSpace(let bytes):
             let s = ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)
-            return "Espacio insuficiente en el disco destino (quedan \(s))."
+            return String(localized: "Espacio insuficiente en el disco destino (quedan \(s)).")
         case .networkLost(let seconds):
-            return "Se detuvo todo porque no hubo conexión a internet durante más de \(Int(seconds)) segundos. Lo ya copiado y verificado está a salvo en el disco; vuelve a iniciar cuando la conexión sea estable y continuará donde se quedó."
+            return String(localized: "Se detuvo todo porque no hubo conexión a internet durante más de \(Int(seconds)) segundos. Lo ya copiado y verificado está a salvo en el disco; vuelve a iniciar cuando la conexión sea estable y continuará donde se quedó.")
+        case .unsafePath(let path):
+            return String(localized: "La carpeta «\(path)» del disco destino apunta fuera de él (es un enlace simbólico). Por seguridad no se copia ahí; elimina o renombra ese enlace.")
         }
     }
 }

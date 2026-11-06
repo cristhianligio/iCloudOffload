@@ -44,7 +44,7 @@ public final class OffloadEngine: @unchecked Sendable {
     public func run() async {
         let activity = ProcessInfo.processInfo.beginActivity(
             options: [.userInitiated, .idleSystemSleepDisabled],
-            reason: "Copiando fotos y videos de iCloud a disco externo")
+            reason: String(localized: "Copiando fotos y videos de iCloud a disco externo"))
         network.start()
         defer {
             network.stop()
@@ -77,11 +77,11 @@ public final class OffloadEngine: @unchecked Sendable {
             summary.stopReason = stop.reason
             switch stop.reason {
             case .user:
-                log(.warning, "Proceso detenido. Lo ya copiado y verificado está a salvo; no se borró nada pendiente.")
+                log(.warning, String(localized: "Proceso detenido. Lo ya copiado y verificado está a salvo; no se borró nada pendiente."))
             case .networkLost:
                 let e = OffloadError.networkLost(options.networkStopTimeout)
                 summary.fatalError = e.errorDescription
-                summary.fatalErrorDetail = "OffloadError.networkLost · sin conexión útil ≥ \(Int(options.networkStopTimeout)) s"
+                summary.fatalErrorDetail = String(localized: "OffloadError.networkLost · sin conexión útil ≥ \(Int(options.networkStopTimeout)) s")
             }
             lock.withLock { stopProgress?.remaining = 0 }
             if let sp = lock.withLock({ stopProgress }) { emit(.stopping(sp)) }
@@ -125,21 +125,21 @@ public final class OffloadEngine: @unchecked Sendable {
             if st != last {
                 if st.isOffline && !last.isOffline {
                     log(.warning, st.reachable
-                        ? "Las descargas desde iCloud están fallando por problemas de red. Si no se recupera en \(timeout) s, se detendrá todo."
-                        : "Se perdió la conexión a internet. Las descargas nuevas quedan en espera; si no vuelve en \(timeout) s, se detendrá todo.")
+                        ? String(localized: "Las descargas desde iCloud están fallando por problemas de red. Si no se recupera en \(timeout) s, se detendrá todo.")
+                        : String(localized: "Se perdió la conexión a internet. Las descargas nuevas quedan en espera; si no vuelve en \(timeout) s, se detendrá todo."))
                 }
                 if !st.isOffline && last.isOffline {
-                    log(.success, "Conexión restablecida. Se reanudan las descargas.")
+                    log(.success, String(localized: "Conexión restablecida. Se reanudan las descargas."))
                 }
                 if st.unstable && !last.unstable {
-                    log(.warning, "La conexión a internet es inestable: algunas descargas pueden fallar y se reintentarán.")
+                    log(.warning, String(localized: "La conexión a internet es inestable: algunas descargas pueden fallar y se reintentarán."))
                 }
                 emit(.network(st))
                 last = st
             }
             if network.shouldStop(at: now) {
                 log(.error, OffloadError.networkLost(options.networkStopTimeout).errorDescription ?? "",
-                    detail: "Sin conexión útil desde \(st.offlineSince.map { "\($0)" } ?? "?")")
+                    detail: "NetworkHealth.shouldStop · offlineSince=\(st.offlineSince.map { "\($0)" } ?? "?")")
                 beginStopping(.networkLost)
                 pipeline.cancel()
                 return
@@ -157,7 +157,7 @@ public final class OffloadEngine: @unchecked Sendable {
         let volume = try VolumeInfo.inspect(dest)
         let eligibility = volume.eligibility
         guard eligibility.isEligible else { throw OffloadError.destinationNotEligible(eligibility.message) }
-        log(.info, "Destino: \(dest.path) (\(volume.name ?? "?"), \(volume.format ?? "formato desconocido"))")
+        log(.info, String(localized: "Destino: \(dest.path) (\(volume.name ?? "?"), \(volume.format ?? String(localized: "formato desconocido")))"))
         if let free = VolumeInfo.internalAvailableBytes(), free < options.minimumInternalFreeBytes {
             throw OffloadError.lowInternalSpace(free)
         }
@@ -170,34 +170,50 @@ public final class OffloadEngine: @unchecked Sendable {
         }
 
         // 3. Escaneo
-        let manifest = try Manifest(directory: dest)
+        let key = ManifestKey.loadOrCreate()
+        if key == nil {
+            log(.warning, String(localized: "No se pudo usar la clave del Llavero para firmar el registro de copias. Se puede copiar, pero antes de borrar algo de iCloud se comprobará su copia contra el original."),
+                detail: String(localized: "ManifestKey.loadOrCreate() == nil (Llavero no disponible o acceso denegado)"))
+        }
+        let manifest = try Manifest(directory: dest, key: key)
         removeLeftoverPartials(in: dest)
         let allocator = PathAllocator()
-        log(.info, "Leyendo la fototeca…")
+        log(.info, String(localized: "Leyendo la fototeca…"))
         let assets = PhotoLibrary.fetchAssets(filter: options.mediaFilter, from: options.fromDate, to: options.toDate)
 
-        var pending: [PHAsset] = []
+        // Cada pendiente lleva, si existe, el registro anterior sin firma válida que hay que confirmar contra iCloud.
+        var pending: [(asset: PHAsset, unverified: AssetRecord?)] = []
         var deleteQueue: [AssetRecord] = []
+        var untrusted = 0
         for asset in assets {
             try Task.checkCancellation()
-            guard let rec = await manifest.record(for: asset.localIdentifier) else {
-                pending.append(asset)
+            guard let entry = await manifest.entry(for: asset.localIdentifier) else {
+                pending.append((asset, nil))
                 continue
             }
+            let rec = entry.record
             summary.previouslyCopied += 1
-            if deletionEnabled && rec.deletedAt == nil {
-                if try Verifier.verify(record: rec, root: dest) {
-                    deleteQueue.append(rec)
-                } else {
-                    log(.warning, "La copia anterior de \(rec.resources.first?.originalFilename ?? rec.localIdentifier) no coincide con la registrada; se volverá a copiar.")
-                    summary.previouslyCopied -= 1
-                    pending.append(asset)
-                }
+            guard deletionEnabled && rec.deletedAt == nil else { continue }
+            if !entry.trusted {
+                // Registro de una versión anterior, o editado fuera de la app: no basta con comparar
+                // los archivos con el propio registro; se comprueban contra el original de iCloud.
+                untrusted += 1
+                summary.previouslyCopied -= 1
+                pending.append((asset, rec))
+            } else if try Verifier.verify(record: rec, root: dest) {
+                deleteQueue.append(rec)
+            } else {
+                log(.warning, String(localized: "La copia anterior de \(rec.resources.first?.originalFilename ?? rec.localIdentifier) no coincide con la registrada; se volverá a copiar."))
+                summary.previouslyCopied -= 1
+                pending.append((asset, nil))
             }
+        }
+        if untrusted > 0 {
+            log(.info, String(localized: "\(untrusted) copia(s) anterior(es) no tienen una firma válida en el registro (p. ej. hechas con una versión anterior de la app). Antes de borrarlas de iCloud se compararán con el original."))
         }
         summary.totalInLibrary = assets.count
         summary.pending = pending.count
-        log(.info, "\(assets.count) elementos encontrados · \(pending.count) por copiar · \(summary.previouslyCopied) ya copiados antes.")
+        log(.info, String(localized: "\(assets.count) elementos encontrados · \(pending.count) por copiar · \(summary.previouslyCopied) ya copiados antes."))
         publish()
 
         if deleteQueue.count >= options.deleteBatchSize {
@@ -213,15 +229,15 @@ public final class OffloadEngine: @unchecked Sendable {
             func resourcesAllowStart() -> Bool {
                 guard let vol = try? VolumeInfo.inspect(dest), vol.eligibility.isEligible,
                       FileManager.default.fileExists(atPath: dest.path) else {
-                    log(.error, "El disco destino ya no está disponible (¿se desconectó?). Se detiene la copia; no se borra nada pendiente.")
+                    log(.error, String(localized: "El disco destino ya no está disponible (¿se desconectó?). Se detiene la copia; no se borra nada pendiente."))
                     return false
                 }
                 if let free = vol.availableBytes, free < options.minimumFreeBytes {
-                    log(.error, OffloadError.lowDiskSpace(free).localizedDescription + " Se detiene la copia.")
+                    log(.error, OffloadError.lowDiskSpace(free).localizedDescription + String(localized: " Se detiene la copia."))
                     return false
                 }
                 if let free = VolumeInfo.internalAvailableBytes(), free < options.minimumInternalFreeBytes {
-                    log(.error, OffloadError.lowInternalSpace(free).localizedDescription + " Se detiene la copia.")
+                    log(.error, OffloadError.lowInternalSpace(free).localizedDescription + String(localized: " Se detiene la copia."))
                     return false
                 }
                 return true
@@ -232,10 +248,10 @@ public final class OffloadEngine: @unchecked Sendable {
                 while running < options.maxConcurrentExports, next < pending.count, !halted,
                       !Task.isCancelled, network.isPathReachable {
                     guard resourcesAllowStart() else { halted = true; break }
-                    let asset = pending[next]; next += 1
+                    let item = pending[next]; next += 1
                     running += 1
                     lock.withLock { inFlight += 1 }
-                    group.addTask { await self.processWithRetry(asset, allocator: allocator) }
+                    group.addTask { await self.processWithRetry(item.asset, unverified: item.unverified, allocator: allocator) }
                 }
 
                 if running == 0 {
@@ -251,11 +267,16 @@ public final class OffloadEngine: @unchecked Sendable {
                 updateStopping()
 
                 switch outcome {
-                case .success(let record):
+                case .success(let record, let copied):
                     try await manifest.append(record)
-                    summary.copied += 1
                     summary.verified += 1
-                    summary.bytesCopied += record.totalBytes
+                    if copied {
+                        summary.copied += 1
+                        summary.bytesCopied += record.totalBytes
+                    } else {
+                        summary.confirmed += 1
+                        summary.previouslyCopied += 1
+                    }
                     if deletionEnabled { deleteQueue.append(record) }
                 case .failure:
                     summary.failed += 1
@@ -276,9 +297,9 @@ public final class OffloadEngine: @unchecked Sendable {
             try await flushDeletes(&deleteQueue, manifest: manifest)
         }
         if options.deleteAfterVerify && summary.deleted > 0 {
-            log(.warning, "Los elementos borrados están en «Eliminado recientemente» de Fotos durante 30 días. Vacía esa carpeta para liberar el espacio en iCloud de inmediato.")
+            log(.warning, String(localized: "Los elementos borrados están en «Eliminado recientemente» de Fotos durante 30 días. Vacía esa carpeta para liberar el espacio en iCloud de inmediato."))
         }
-        log(.info, "Terminado. Registro de copias: \(manifest.url.path)")
+        log(.info, String(localized: "Terminado. Registro de copias: \(manifest.url.path)"))
     }
 
     /// Borra temporales «.UUID.partial» que quedaron de una ejecución interrumpida (cierre forzado, corte de luz…).
@@ -291,7 +312,7 @@ public final class OffloadEngine: @unchecked Sendable {
             if name == ".icloud-offload" { e.skipDescendants(); continue }
             if name.hasPrefix("."), name.hasSuffix(".partial"), (try? fm.removeItem(at: url)) != nil { removed += 1 }
         }
-        if removed > 0 { log(.info, "Se eliminaron \(removed) archivo(s) temporal(es) de una copia anterior interrumpida.") }
+        if removed > 0 { log(.info, String(localized: "Se eliminaron \(removed) archivo(s) temporal(es) de una copia anterior interrumpida.")) }
     }
 
     private func flushDeletes(_ queue: inout [AssetRecord], manifest: Manifest) async throws {
@@ -300,19 +321,27 @@ public final class OffloadEngine: @unchecked Sendable {
         queue.removeAll()
 
         // Última comprobación justo antes de borrar: los archivos siguen ahí y siguen íntegros.
+        // Y lo que dice el registro corresponde con lo que Fotos tiene ahora para ese elemento.
+        let current = PhotoLibrary.resourceSummaries(for: batch.map(\.localIdentifier))
         var safe: [AssetRecord] = []
         for rec in batch {
+            let expected = rec.resources.map { ResourceSummary(kind: $0.kind, originalFilename: $0.originalFilename) }
+            guard current[rec.localIdentifier] == expected else {
+                log(.error, String(localized: "Lo registrado para \(rec.resources.first?.originalFilename ?? String(localized: "un elemento")) no corresponde con lo que hay en Fotos. No se borra de iCloud."),
+                    detail: String(localized: "Recursos distintos entre registro y PhotoKit · \(rec.localIdentifier)"))
+                continue
+            }
             if try Verifier.verify(record: rec, root: options.destination) {
                 safe.append(rec)
             } else {
-                log(.error, "La copia de \(rec.resources.first?.originalFilename ?? "un elemento") ya no coincide con la registrada (¿se modificó o dañó el archivo?). No se borra de iCloud.",
-                    detail: "Re-verificación SHA-256 fallida · \(rec.localIdentifier)")
+                log(.error, String(localized: "La copia de \(rec.resources.first?.originalFilename ?? String(localized: "un elemento")) ya no coincide con la registrada (¿se modificó o dañó el archivo?). No se borra de iCloud."),
+                    detail: String(localized: "Re-verificación SHA-256 fallida · \(rec.localIdentifier)"))
             }
         }
         try Task.checkCancellation()
         guard !safe.isEmpty else { return }
 
-        log(.info, "Solicitando borrar \(safe.count) elemento/s de Fotos/iCloud (confirma en el diálogo de macOS)…")
+        log(.info, String(localized: "Solicitando borrar \(safe.count) elemento/s de Fotos/iCloud (confirma en el diálogo de macOS)…"))
         lock.withLock { deletionInProgress = true }
         defer {
             lock.withLock { deletionInProgress = false }
@@ -324,12 +353,12 @@ public final class OffloadEngine: @unchecked Sendable {
             try await manifest.markDeleted(ids)
             summary.deleted += n
             summary.bytesDeleted += safe.reduce(0) { $0 + $1.totalBytes }
-            log(.success, "Borrados \(n) elemento/s de la fototeca.")
+            log(.success, String(localized: "Borrados \(n) elemento/s de la fototeca."))
             publish()
         } catch {
             deletionEnabled = false
             let info = ErrorDescriber.describe(error)
-            log(.error, "No se borró el lote: \(info.friendly) El borrado queda desactivado en esta ejecución; la copia continúa.",
+            log(.error, String(localized: "No se borró el lote: \(info.friendly) El borrado queda desactivado en esta ejecución; la copia continúa."),
                 detail: info.technical)
         }
     }
@@ -337,12 +366,12 @@ public final class OffloadEngine: @unchecked Sendable {
     // MARK: - Un elemento
 
     enum AssetOutcome: Sendable {
-        case success(AssetRecord)
+        case success(AssetRecord, copied: Bool)
         case failure(ErrorInfo)
         case cancelled
     }
 
-    private func processWithRetry(_ asset: PHAsset, allocator: PathAllocator) async -> AssetOutcome {
+    private func processWithRetry(_ asset: PHAsset, unverified: AssetRecord?, allocator: PathAllocator) async -> AssetOutcome {
         let id = asset.localIdentifier
         let name = PHAssetResource.assetResources(for: asset).first?.originalFilename ?? id
         emit(.itemStarted(id: id, name: name))
@@ -351,10 +380,16 @@ public final class OffloadEngine: @unchecked Sendable {
         let maxAttempts = 3
         for attempt in 1...maxAttempts {
             do {
-                let record = try await process(asset, allocator: allocator)
+                let (record, copied): (AssetRecord, Bool)
+                if let unverified {
+                    (record, copied) = try await confirm(asset, previous: unverified, allocator: allocator)
+                } else {
+                    (record, copied) = (try await process(asset, allocator: allocator), true)
+                }
                 network.recordSuccess()
-                emit(.itemFinished(id: id, result: .success(bytes: record.totalBytes, files: record.resources.count)))
-                return .success(record)
+                let (bytes, files) = (record.totalBytes, record.resources.count)
+                emit(.itemFinished(id: id, result: copied ? .success(bytes: bytes, files: files) : .confirmed(bytes: bytes, files: files)))
+                return .success(record, copied: copied)
             } catch {
                 if error is CancellationError || Task.isCancelled {
                     emit(.itemFinished(id: id, result: .cancelled))
@@ -379,9 +414,63 @@ public final class OffloadEngine: @unchecked Sendable {
                 }
             }
         }
-        let info = lastInfo ?? ErrorInfo(friendly: "Error desconocido.", technical: "desconocido")
+        let info = lastInfo ?? ErrorInfo(friendly: String(localized: "Error desconocido."), technical: "desconocido")
         emit(.itemFinished(id: id, result: .failure(info)))
         return .failure(info)
+    }
+
+    /// Confirma una copia anterior cuyo registro no es de confianza: descarga de nuevo el original de iCloud
+    /// (solo para calcular su SHA-256, sin escribirlo) y lo compara con el registro y con el archivo del disco.
+    /// Si algo no cuadra, el elemento se copia de nuevo. Devuelve el registro y si hubo que copiar.
+    private func confirm(_ asset: PHAsset, previous rec: AssetRecord,
+                         allocator: PathAllocator) async throws -> (AssetRecord, Bool) {
+        let id = asset.localIdentifier
+        let dest = options.destination
+        let resources = PHAssetResource.assetResources(for: asset)
+        let name = rec.resources.first?.originalFilename ?? id
+
+        func recopy(_ reason: String) async throws -> (AssetRecord, Bool) {
+            log(.warning, String(localized: "La copia anterior de \(name) no coincide con el original de iCloud; se copiará de nuevo."),
+                detail: String(localized: "Confirmación fallida · \(reason) · \(id)"))
+            return (try await process(asset, allocator: allocator), true)
+        }
+
+        guard resources.count == rec.resources.count,
+              zip(resources, rec.resources).allSatisfy({ PhotoLibrary.kindName($0.type) == $1.kind && $0.originalFilename == $1.originalFilename })
+        else { return try await recopy(String(localized: "los recursos de Fotos no coinciden con el registro")) }
+
+        let total = max(rec.totalBytes, 1)
+        var done: Int64 = 0
+        for (res, r) in zip(resources, rec.resources) {
+            try Task.checkCancellation()
+            guard let url = PathSafety.resolve(r.relativePath, in: dest), PathSafety.isRegularFile(url) else {
+                return try await recopy(String(localized: "ruta no válida o archivo ausente: \(r.relativePath)"))
+            }
+            let base = done
+            network.downloadStarted()
+            let source: (sha256: String, size: Int64)
+            do {
+                defer { network.downloadEnded() }
+                source = try await ResourceExporter.digest(
+                    of: res,
+                    progress: { [weak self] p in
+                        self?.emit(.itemProgress(ItemProgress(id: id, fraction: min(1, Double(base + p.bytesWritten) / Double(total)),
+                                                              bytes: base + p.bytesWritten, expectedBytes: rec.totalBytes, phase: .confirming)))
+                    },
+                    onNetworkProgress: { [weak self] in self?.network.recordActivity() })
+            }
+            guard source.sha256 == r.sha256, source.size == r.size else {
+                return try await recopy(String(localized: "el SHA-256 del original no coincide con el registro: \(r.relativePath)"))
+            }
+            guard try Verifier.verify(file: url, expectedSHA256: source.sha256, expectedSize: source.size) else {
+                return try await recopy(String(localized: "el archivo del disco no coincide con el original: \(r.relativePath)"))
+            }
+            done += r.size
+        }
+        var confirmed = rec
+        confirmed.verifiedAt = Date()
+        confirmed.mac = nil
+        return (confirmed, false)
     }
 
     private func process(_ asset: PHAsset, allocator: PathAllocator) async throws -> AssetRecord {
@@ -392,7 +481,11 @@ public final class OffloadEngine: @unchecked Sendable {
 
         let relDir = PathBuilder.relativeDirectory(for: asset.creationDate)
         let dir = options.destination.appendingPathComponent(relDir, isDirectory: true)
+        // Una carpeta «AAAA/MM» que sea un enlace simbólico podría desviar las copias fuera del disco externo.
+        // Se comprueba antes de crear nada y otra vez después (por si cambió entre medias).
+        guard PathSafety.isInside(dir, root: options.destination) else { throw OffloadError.unsafePath(relDir) }
         try fm.createDirectory(at: dir, withIntermediateDirectories: true)
+        guard PathSafety.isInside(dir, root: options.destination) else { throw OffloadError.unsafePath(relDir) }
 
         let kinds = resources.map { PhotoLibrary.kindName($0.type) }
         let planned = PathBuilder.plannedNames(for: zip(kinds, resources).map { ($0, $1.originalFilename) })

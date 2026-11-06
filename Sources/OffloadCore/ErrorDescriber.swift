@@ -22,7 +22,7 @@ public enum ErrorDescriber {
         let technical = technicalDescription(error)
 
         if error is CancellationError {
-            return ErrorInfo(friendly: "Operación detenida.", technical: technical)
+            return ErrorInfo(friendly: String(localized: "Operación detenida."), technical: technical)
         }
         if let e = error as? OffloadError {
             return ErrorInfo(friendly: e.errorDescription ?? "Error.", technical: technical)
@@ -34,7 +34,7 @@ public enum ErrorDescriber {
             }
         }
         return ErrorInfo(
-            friendly: "Ocurrió un error inesperado al procesar este elemento. No se borró nada; se volverá a intentar en la próxima ejecución.",
+            friendly: String(localized: "Ocurrió un error inesperado al procesar este elemento. No se borró nada; se volverá a intentar en la próxima ejecución."),
             technical: technical)
     }
 
@@ -89,41 +89,41 @@ public enum ErrorDescriber {
         ETIMEDOUT: "ETIMEDOUT", ENOTCONN: "ENOTCONN", ECANCELED: "ECANCELED",
     ]
 
-    private static let retryNote = "No se borró nada; se volverá a intentar en la próxima ejecución."
+    private static let retryNote = String(localized: "No se borró nada; se volverá a intentar en la próxima ejecución.")
 
     static func friendlyText(for ns: NSError) -> (String, Bool)? {
         switch ns.domain {
         case photosDomain:
             switch ns.code {
             case 3164, 3169:
-                return ("No se pudo descargar el archivo desde iCloud por un problema con la conexión a internet. \(retryNote)", true)
+                return (String(localized: "No se pudo descargar el archivo desde iCloud por un problema con la conexión a internet. \(retryNote)"), true)
             case 3072:
-                return ("La operación se canceló en el diálogo de macOS.", false)
+                return (String(localized: "La operación se canceló en el diálogo de macOS."), false)
             case 3114, 3142, 3143:
-                return ("La fototeca de Fotos no está disponible en este momento (¿está en un disco desconectado o se cambió de fototeca?).", false)
+                return (String(localized: "La fototeca de Fotos no está disponible en este momento (¿está en un disco desconectado o se cambió de fototeca?)."), false)
             case 3201:
-                return ("Este elemento ya no existe en la fototeca; quizá se borró desde otro dispositivo.", false)
+                return (String(localized: "Este elemento ya no existe en la fototeca; quizá se borró desde otro dispositivo."), false)
             case 3300:
-                return ("Fotos no permite borrar este elemento (por ejemplo, si pertenece a un álbum compartido).", false)
+                return (String(localized: "Fotos no permite borrar este elemento (por ejemplo, si pertenece a un álbum compartido)."), false)
             case 3301:
-                return ("La operación se interrumpió (Fotos se cerró o el Mac entró en reposo). \(retryNote)", false)
+                return (String(localized: "La operación se interrumpió (Fotos se cerró o el Mac entró en reposo). \(retryNote)"), false)
             case 3302, 3303:
-                return ("Fotos no encuentra el archivo original de este elemento o está dañado. Ábrelo en Fotos para comprobarlo. No se borró nada.", false)
+                return (String(localized: "Fotos no encuentra el archivo original de este elemento o está dañado. Ábrelo en Fotos para comprobarlo. No se borró nada."), false)
             case 3305:
-                return ("No hay espacio suficiente en el disco interno del Mac para que Fotos descargue este archivo de iCloud. Libera espacio y vuelve a intentarlo.", false)
+                return (String(localized: "No hay espacio suficiente en el disco interno del Mac para que Fotos descargue este archivo de iCloud. Libera espacio y vuelve a intentarlo."), false)
             case 3306:
-                return ("Fotos no permite exportar este tipo de elemento. No se borró nada.", false)
+                return (String(localized: "Fotos no permite exportar este tipo de elemento. No se borró nada."), false)
             case 3310, 3311:
-                return ("La app no tiene permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos.", false)
+                return (String(localized: "La app no tiene permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos."), false)
             default:
-                return ("Fotos no pudo completar la operación con este elemento. \(retryNote)", false)
+                return (String(localized: "Fotos no pudo completar la operación con este elemento. \(retryNote)"), false)
             }
         case NSURLErrorDomain:
             switch ns.code {
             case NSURLErrorNotConnectedToInternet, NSURLErrorNetworkConnectionLost, NSURLErrorTimedOut,
                  NSURLErrorCannotFindHost, NSURLErrorCannotConnectToHost, NSURLErrorDNSLookupFailed,
                  NSURLErrorDataNotAllowed, NSURLErrorInternationalRoamingOff:
-                return ("Se perdió la conexión a internet mientras se descargaba el archivo de iCloud. \(retryNote)", true)
+                return (String(localized: "Se perdió la conexión a internet mientras se descargaba el archivo de iCloud. \(retryNote)"), true)
             default:
                 return nil
             }
@@ -132,13 +132,13 @@ public enum ErrorDescriber {
         case NSCocoaErrorDomain:
             switch ns.code {
             case CocoaError.fileWriteOutOfSpace.rawValue:
-                return ("El disco externo se ha llenado. Libera espacio o usa otro disco.", false)
+                return (String(localized: "El disco externo se ha llenado. Libera espacio o usa otro disco."), false)
             case CocoaError.fileWriteVolumeReadOnly.rawValue:
-                return ("El disco externo es de solo lectura.", false)
+                return (String(localized: "El disco externo es de solo lectura."), false)
             case CocoaError.fileWriteNoPermission.rawValue:
-                return ("No hay permiso para escribir en la carpeta de destino.", false)
+                return (String(localized: "No hay permiso para escribir en la carpeta de destino."), false)
             case CocoaError.fileNoSuchFile.rawValue, CocoaError.fileWriteUnknown.rawValue:
-                return ("No se pudo escribir en el disco externo. ¿Se desconectó? \(retryNote)", false)
+                return (String(localized: "No se pudo escribir en el disco externo. ¿Se desconectó? \(retryNote)"), false)
             default:
                 return nil
             }
@@ -149,13 +149,13 @@ public enum ErrorDescriber {
 
     static func posixText(_ code: Int32) -> (String, Bool)? {
         switch code {
-        case ENOSPC: return ("El disco externo se ha llenado. Libera espacio o usa otro disco.", false)
-        case EFBIG: return ("El archivo es demasiado grande para el formato del disco (FAT32 admite como máximo 4 GB). Usa un disco APFS o exFAT.", false)
-        case EROFS: return ("El disco externo es de solo lectura.", false)
-        case EACCES, EPERM: return ("No hay permiso para escribir en la carpeta de destino.", false)
-        case EIO, ENXIO, ENODEV, ENOENT: return ("No se pudo leer o escribir en el disco externo. ¿Se desconectó? \(retryNote)", false)
+        case ENOSPC: return (String(localized: "El disco externo se ha llenado. Libera espacio o usa otro disco."), false)
+        case EFBIG: return (String(localized: "El archivo es demasiado grande para el formato del disco (FAT32 admite como máximo 4 GB). Usa un disco APFS o exFAT."), false)
+        case EROFS: return (String(localized: "El disco externo es de solo lectura."), false)
+        case EACCES, EPERM: return (String(localized: "No hay permiso para escribir en la carpeta de destino."), false)
+        case EIO, ENXIO, ENODEV, ENOENT: return (String(localized: "No se pudo leer o escribir en el disco externo. ¿Se desconectó? \(retryNote)"), false)
         case ENETDOWN, ENETUNREACH, ECONNRESET, ETIMEDOUT, ENOTCONN:
-            return ("Se perdió la conexión a internet mientras se descargaba el archivo de iCloud. \(retryNote)", true)
+            return (String(localized: "Se perdió la conexión a internet mientras se descargaba el archivo de iCloud. \(retryNote)"), true)
         default: return nil
         }
     }

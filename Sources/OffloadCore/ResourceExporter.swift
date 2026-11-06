@@ -27,10 +27,10 @@ public struct ExportProgress: Sendable {
     }
 }
 
-/// Escribe los bytes recibidos, calcula el hash a la vez y lleva la cuenta del progreso.
+/// Escribe los bytes recibidos (si hay archivo), calcula el hash a la vez y lleva la cuenta del progreso.
 private final class StreamWriter: @unchecked Sendable {
     private let lock = NSLock()
-    private let handle: FileHandle
+    private let handle: FileHandle?
     private var hasher = SHA256()
     private var size: Int64 = 0
     private var failure: Error?
@@ -41,7 +41,7 @@ private final class StreamWriter: @unchecked Sendable {
     private let onNetworkProgress: (@Sendable () -> Void)?
     var onFailure: (() -> Void)?
 
-    init(handle: FileHandle, expectedBytes: Int64?,
+    init(handle: FileHandle?, expectedBytes: Int64?,
          report: (@Sendable (ExportProgress) -> Void)?, onNetworkProgress: (@Sendable () -> Void)?) {
         self.handle = handle
         self.expectedBytes = expectedBytes
@@ -53,7 +53,7 @@ private final class StreamWriter: @unchecked Sendable {
         let failedNow: Bool = lock.withLock {
             guard failure == nil else { return false }
             do {
-                try handle.write(contentsOf: data)
+                try handle?.write(contentsOf: data)
                 hasher.update(data: data)
                 size += Int64(data.count)
                 return false
@@ -114,6 +114,46 @@ private final class RequestBox: @unchecked Sendable {
 }
 
 public enum ResourceExporter {
+    /// Pide a Fotos los bytes del recurso original (descargándolo de iCloud si hace falta) y los pasa a `writer`.
+    private static func request(_ resource: PHAssetResource, writer: StreamWriter, box: RequestBox) async throws {
+        let options = PHAssetResourceRequestOptions()
+        options.isNetworkAccessAllowed = true  // descarga el original de iCloud si no está local
+        options.progressHandler = { p in writer.downloadProgress(p) }
+        try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+                let id = PHAssetResourceManager.default().requestData(
+                    for: resource, options: options,
+                    dataReceivedHandler: { data in writer.consume(data) },
+                    completionHandler: { error in
+                        if let error { cont.resume(throwing: error) } else { cont.resume() }
+                    })
+                box.set(id)
+            }
+        } onCancel: {
+            box.cancel()
+        }
+    }
+
+    /// SHA-256 y tamaño del original tal como lo entrega Fotos/iCloud, sin escribir nada en disco.
+    /// Sirve para confirmar contra la fuente una copia anterior cuyo registro no es de confianza.
+    public static func digest(
+        of resource: PHAssetResource,
+        progress: (@Sendable (ExportProgress) -> Void)? = nil,
+        onNetworkProgress: (@Sendable () -> Void)? = nil
+    ) async throws -> (sha256: String, size: Int64) {
+        let writer = StreamWriter(handle: nil, expectedBytes: expectedSize(of: resource),
+                                  report: progress, onNetworkProgress: onNetworkProgress)
+        do {
+            try await request(resource, writer: writer, box: RequestBox())
+        } catch {
+            throw Task.isCancelled ? CancellationError() : error
+        }
+        try Task.checkCancellation()
+        writer.finalReport()
+        let (digest, size) = try writer.result()
+        return (digest, size)
+    }
+
     /// Tamaño del archivo según Fotos, si lo expone (propiedad no documentada; se consulta de forma segura).
     public static func expectedSize(of resource: PHAssetResource) -> Int64? {
         guard resource.responds(to: NSSelectorFromString("fileSize")) else { return nil }
@@ -131,7 +171,7 @@ public enum ResourceExporter {
     ) async throws -> ExportedFile {
         let fm = FileManager.default
         let tmp = finalURL.deletingLastPathComponent()
-            .appendingPathComponent(".\(UUID().uuidString).partial")
+            .appendingPathComponent(String(localized: ".\(UUID().uuidString).partial"))
         guard fm.createFile(atPath: tmp.path, contents: nil) else {
             throw CocoaError(.fileWriteUnknown, userInfo: [NSFilePathErrorKey: tmp.path])
         }
@@ -146,24 +186,8 @@ public enum ResourceExporter {
             let box = RequestBox()
             writer.onFailure = { box.cancel() }
 
-            let options = PHAssetResourceRequestOptions()
-            options.isNetworkAccessAllowed = true  // descarga el original de iCloud si no está local
-            options.progressHandler = { p in writer.downloadProgress(p) }
-
             do {
-                try await withTaskCancellationHandler {
-                    try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
-                        let id = PHAssetResourceManager.default().requestData(
-                            for: resource, options: options,
-                            dataReceivedHandler: { data in writer.consume(data) },
-                            completionHandler: { error in
-                                if let error { cont.resume(throwing: error) } else { cont.resume() }
-                            })
-                        box.set(id)
-                    }
-                } onCancel: {
-                    box.cancel()
-                }
+                try await request(resource, writer: writer, box: box)
             } catch {
                 try? handle.close()
                 // Prioriza el error de escritura (p. ej. disco lleno) sobre el de cancelación.

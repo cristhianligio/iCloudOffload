@@ -12,7 +12,11 @@ public enum Verifier {
     public static func verify(record: AssetRecord, root: URL) throws -> Bool {
         guard !record.resources.isEmpty else { return false }
         for r in record.resources {
-            let url = root.appendingPathComponent(r.relativePath)
+            // El registro vive en el disco externo y podría estar manipulado: la ruta debe quedar
+            // dentro de la carpeta destino y apuntar a un archivo normal.
+            guard let url = PathSafety.resolve(r.relativePath, in: root), PathSafety.isRegularFile(url) else {
+                return false
+            }
             do {
                 guard try verify(file: url, expectedSHA256: r.sha256, expectedSize: r.size) else { return false }
             } catch is CancellationError {

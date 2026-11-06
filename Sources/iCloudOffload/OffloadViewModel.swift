@@ -22,7 +22,7 @@ private final class DestinationPanelDelegate: NSObject, NSOpenSavePanelDelegate 
         }
         guard eligibility.isEligible else {
             throw NSError(domain: "iCloudOffload", code: 1, userInfo: [
-                NSLocalizedDescriptionKey: "Esta carpeta no se puede usar como destino.",
+                NSLocalizedDescriptionKey: String(localized: "Esta carpeta no se puede usar como destino."),
                 NSLocalizedRecoverySuggestionErrorKey: eligibility.message,
             ])
         }
@@ -95,8 +95,8 @@ final class OffloadViewModel: ObservableObject {
         panel.canChooseFiles = false
         panel.canCreateDirectories = true
         panel.allowsMultipleSelection = false
-        panel.prompt = "Usar esta carpeta"
-        panel.message = "Elige un disco externo (o una carpeta dentro de él). No se admite el disco interno del Mac."
+        panel.prompt = String(localized: "Usar esta carpeta")
+        panel.message = String(localized: "Elige un disco externo (o una carpeta dentro de él). No se admite el disco interno del Mac.")
         panel.directoryURL = URL(fileURLWithPath: "/Volumes")
         let response = panel.runModal()
         withExtendedLifetime(delegate) {}
@@ -111,7 +111,7 @@ final class OffloadViewModel: ObservableObject {
         guard let destination else { volume = nil; manifestSummary = nil; return }
         guard FileManager.default.fileExists(atPath: destination.path) else {
             volume = nil
-            volumeError = "El disco se desconectó."
+            volumeError = String(localized: "El disco se desconectó.")
             manifestSummary = nil
             return
         }
@@ -206,6 +206,10 @@ final class OffloadViewModel: ObservableObject {
         }
     }
 
+    private func filesText(_ n: Int) -> String {
+        n == 1 ? String(localized: "1 archivo") : String(localized: "\(n) archivos")
+    }
+
     private func finishItemRow(id: String, result: ItemResult) {
         let name = itemNames[id] ?? id
         guard let i = logs.lastIndex(where: { $0.itemID == id }) else { return }
@@ -213,14 +217,18 @@ final class OffloadViewModel: ObservableObject {
         case .success(let bytes, let files):
             logs[i].level = .success
             let size = ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)
-            logs[i].message = "\(name) · \(files == 1 ? "1 archivo" : "\(files) archivos"), \(size) · copiado y verificado"
+            logs[i].message = String(localized: "\(name) · \(filesText(files)), \(size) · copiado y verificado")
+        case .confirmed(let bytes, let files):
+            logs[i].level = .success
+            let size = ByteCountFormatter.string(fromByteCount: bytes, countStyle: .file)
+            logs[i].message = String(localized: "\(name) · \(filesText(files)), \(size) · copia anterior confirmada contra iCloud")
         case .failure(let info):
             logs[i].level = .error
             logs[i].message = "\(name): \(info.friendly)"
             logs[i].detail = info.technical
         case .cancelled:
             logs[i].level = .warning
-            logs[i].message = "\(name): detenido antes de terminar. No se borró de iCloud."
+            logs[i].message = String(localized: "\(name): detenido antes de terminar. No se borró de iCloud.")
         }
     }
 

@@ -1,0 +1,3 @@
+/* Textos del Info.plist en español (el Info.plist base está en inglés). */
+"NSPhotoLibraryUsageDescription" = "iCloud Offload necesita acceso a tu fototeca para copiar tus fotos y videos a un disco externo, verificarlos y, si lo autorizas, borrarlos de iCloud.";
+"NSHumanReadableCopyright" = "© 2026 Cristhian Ligio. Distribuida bajo la licencia MIT.";

@@ -1,3 +1,4 @@
+import CryptoKit
 import Foundation
 import Testing
 @testable import OffloadCore
@@ -74,7 +75,7 @@ private func tempDir() throws -> URL {
                                                      relativePath: "2023/11/IMG.HEIC", size: 10, sha256: "abc")],
                           verifiedAt: Date(timeIntervalSince1970: 1_700_000_100))
     do {
-        let m = try Manifest(directory: dir)
+        let m = try Manifest(directory: dir, key: nil)
         try await m.append(rec)
         try await m.markDeleted(["ID-1"])
     }
@@ -82,7 +83,7 @@ private func tempDir() throws -> URL {
     let url = dir.appendingPathComponent(".icloud-offload/manifest.jsonl")
     let h = try FileHandle(forWritingTo: url); try h.seekToEnd(); try h.write(contentsOf: Data("{\"local".utf8)); try h.close()
 
-    let reloaded = try Manifest(directory: dir)
+    let reloaded = try Manifest(directory: dir, key: nil)
     let r = await reloaded.record(for: "ID-1")
     #expect(r?.resources == rec.resources)
     #expect(r?.deletedAt != nil)
@@ -243,4 +244,92 @@ private func tempDir() throws -> URL {
     #expect(!h.shouldStop(at: t0.addingTimeInterval(60)))
     h.downloadEnded(at: t0.addingTimeInterval(31))
     #expect(!h.state(at: t0.addingTimeInterval(500)).isOffline)  // sin descargas no hay atasco
+}
+
+// MARK: - Seguridad: rutas del registro
+
+@Test func manifestPathsCannotEscapeDestination() throws {
+    let root = try tempDir()
+    #expect(PathSafety.resolve("../../../../etc/hosts", in: root) == nil)
+    #expect(PathSafety.resolve("/etc/hosts", in: root) == nil)
+    #expect(PathSafety.resolve("2026/../../x", in: root) == nil)
+    #expect(PathSafety.resolve("2026//x", in: root) == nil)
+    #expect(PathSafety.resolve("./x", in: root) == nil)
+    #expect(PathSafety.resolve("", in: root) == nil)
+    #expect(PathSafety.resolve("2026/01/IMG.HEIC", in: root) != nil)
+}
+
+@Test func verifierRejectsRecordPointingOutside() throws {
+    let root = try tempDir()
+    let (d, s) = try FileHasher.sha256(of: URL(fileURLWithPath: "/etc/hosts"))
+    let rec = AssetRecord(localIdentifier: "X", creationDate: nil, mediaType: "image",
+        resources: [ResourceRecord(kind: "photo", originalFilename: "x", relativePath: "../../../../../../etc/hosts",
+                                   size: s, sha256: d)], verifiedAt: Date())
+    #expect(try Verifier.verify(record: rec, root: root) == false)
+}
+
+@Test func symlinkedFolderOrFileIsRejected() throws {
+    let root = try tempDir()
+    let outside = try tempDir()
+    let fm = FileManager.default
+    // Carpeta «2026» que en realidad apunta fuera del destino
+    try fm.createSymbolicLink(at: root.appendingPathComponent("2026"), withDestinationURL: outside)
+    #expect(PathSafety.isInside(root.appendingPathComponent("2026/01"), root: root) == false)
+    try fm.createDirectory(at: outside.appendingPathComponent("01"), withIntermediateDirectories: true)
+    try Data("x".utf8).write(to: outside.appendingPathComponent("01/a.heic"))
+    #expect(PathSafety.resolve("2026/01/a.heic", in: root) == nil)
+    // Archivo que es un enlace simbólico (aunque apunte dentro)
+    try fm.createDirectory(at: root.appendingPathComponent("2025"), withIntermediateDirectories: true)
+    try Data("y".utf8).write(to: root.appendingPathComponent("2025/real.heic"))
+    try fm.createSymbolicLink(at: root.appendingPathComponent("2025/link.heic"),
+                              withDestinationURL: root.appendingPathComponent("2025/real.heic"))
+    #expect(PathSafety.isRegularFile(root.appendingPathComponent("2025/real.heic")))
+    #expect(!PathSafety.isRegularFile(root.appendingPathComponent("2025/link.heic")))
+}
+
+// MARK: - Seguridad: firma del registro
+
+private func sampleRecord(_ id: String = "ID-1") -> AssetRecord {
+    AssetRecord(localIdentifier: id, creationDate: Date(timeIntervalSince1970: 1_700_000_000), mediaType: "image",
+                resources: [ResourceRecord(kind: "photo", originalFilename: "IMG.HEIC",
+                                           relativePath: "2023/11/IMG.HEIC", size: 10, sha256: "abc")],
+                verifiedAt: Date(timeIntervalSince1970: 1_700_000_100))
+}
+
+@Test func signedManifestIsTrustedOnlyWithSameKey() async throws {
+    let dir = try tempDir()
+    let key = SymmetricKey(size: .bits256)
+    do {
+        let m = try Manifest(directory: dir, key: key)
+        try await m.append(sampleRecord())
+        try await m.markDeleted(["ID-1"])
+    }
+    let same = try Manifest(directory: dir, key: key)
+    #expect(await same.entry(for: "ID-1")?.trusted == true)
+    #expect(await same.entry(for: "ID-1")?.record.deletedAt != nil)
+    #expect(await same.entry(for: "ID-1")?.record.mac == nil)
+    #expect(try await Manifest(directory: dir, key: SymmetricKey(size: .bits256)).entry(for: "ID-1")?.trusted == false)
+    #expect(try await Manifest(directory: dir, key: nil).entry(for: "ID-1")?.trusted == false)
+}
+
+@Test func tamperedOrUnsignedLinesAreNotTrusted() async throws {
+    let dir = try tempDir()
+    let key = SymmetricKey(size: .bits256)
+    do { try await Manifest(directory: dir, key: key).append(sampleRecord()) }
+    let url = Manifest.fileURL(in: dir)
+
+    // 1. Se cambia el hash en la línea firmada (p. ej. tras sustituir el archivo)
+    let original = try String(contentsOf: url, encoding: .utf8)
+    try original.replacingOccurrences(of: "\"abc\"", with: "\"fff\"").write(to: url, atomically: true, encoding: .utf8)
+    #expect(try await Manifest(directory: dir, key: key).entry(for: "ID-1")?.trusted == false)
+
+    // 2. Se añade al final una línea sin firma para el mismo elemento (la última manda)
+    try original.write(to: url, atomically: true, encoding: .utf8)
+    let enc = JSONEncoder(); enc.dateEncodingStrategy = .iso8601
+    var forged = sampleRecord(); forged.resources[0].sha256 = "fff"
+    let h = try FileHandle(forWritingTo: url); try h.seekToEnd()
+    try h.write(contentsOf: try enc.encode(forged) + Data("\n".utf8)); try h.close()
+    let m = try Manifest(directory: dir, key: key)
+    #expect(await m.entry(for: "ID-1")?.trusted == false)
+    #expect(await m.entry(for: "ID-1")?.record.resources[0].sha256 == "fff")
 }

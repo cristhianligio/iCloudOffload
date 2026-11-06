@@ -17,17 +17,17 @@ public enum DestinationEligibility: Equatable, Sendable {
     public var message: String {
         switch self {
         case .eligible:
-            return "Disco externo válido."
+            return String(localized: "Disco externo válido.")
         case .bootVolume, .internalDisk:
-            return "Esta carpeta está en el disco interno del Mac. Elige una carpeta en un disco externo conectado (USB, Thunderbolt o tarjeta SD)."
+            return String(localized: "Esta carpeta está en el disco interno del Mac. Elige una carpeta en un disco externo conectado (USB, Thunderbolt o tarjeta SD).")
         case .diskImage:
-            return "Es una imagen de disco (.dmg): sus datos se guardan en el disco interno. Elige un disco externo físico."
+            return String(localized: "Es una imagen de disco (.dmg): sus datos se guardan en el disco interno. Elige un disco externo físico.")
         case .networkVolume:
-            return "Es una unidad de red. Por fiabilidad de la verificación, solo se admiten discos externos conectados físicamente."
+            return String(localized: "Es una unidad de red. Por fiabilidad de la verificación, solo se admiten discos externos conectados físicamente.")
         case .readOnly:
-            return "El disco es de solo lectura."
+            return String(localized: "El disco es de solo lectura.")
         case .unavailable(let reason):
-            return "No se pudo leer el disco: \(reason)"
+            return String(localized: "No se pudo leer el disco: \(reason)")
         }
     }
 }

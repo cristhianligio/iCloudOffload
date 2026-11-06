@@ -14,7 +14,7 @@ struct TechnicalDetail: View {
             Button {
                 withAnimation(.snappy) { expanded.toggle() }
             } label: {
-                Label(expanded ? "Ocultar detalles técnicos" : "Mostrar detalles técnicos",
+                Label(expanded ? String(localized: "Ocultar detalles técnicos") : String(localized: "Mostrar detalles técnicos"),
                       systemImage: expanded ? "chevron.down" : "chevron.right")
                     .font(.caption)
             }
@@ -129,7 +129,7 @@ struct ItemProgressView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            if let f = progress.fraction, progress.phase == .downloading || progress.phase == .verifying {
+            if let f = progress.fraction, [.downloading, .verifying, .confirming].contains(progress.phase) {
                 ProgressView(value: f)
             } else {
                 ProgressView().progressViewStyle(.linear)
@@ -149,10 +149,11 @@ struct ItemProgressView: View {
 
     private var phaseText: String {
         switch progress.phase {
-        case .downloading: return "Descargando de iCloud y copiando"
-        case .verifying: return "Verificando (SHA-256)"
-        case .retrying(let n): return "Reintentando (intento \(n) de 3)"
-        case .waitingForNetwork: return "Esperando conexión a internet"
+        case .downloading: return String(localized: "Descargando de iCloud y copiando")
+        case .verifying: return String(localized: "Verificando (SHA-256)")
+        case .confirming: return String(localized: "Comparando la copia anterior con el original de iCloud")
+        case .retrying(let n): return String(localized: "Reintentando (intento \(n) de 3)")
+        case .waitingForNetwork: return String(localized: "Esperando conexión a internet")
         }
     }
 
@@ -175,13 +176,13 @@ struct NetworkSection: View {
         Section {
             if network.isOffline {
                 VStack(alignment: .leading, spacing: 6) {
-                    Label(network.reachable ? "La red está fallando" : "Sin conexión a internet",
+                    Label(network.reachable ? String(localized: "La red está fallando") : String(localized: "Sin conexión a internet"),
                           systemImage: network.reachable ? "wifi.exclamationmark" : "wifi.slash")
                         .font(.headline)
                         .foregroundStyle(.red)
                     Text(network.reachable
-                         ? "Las descargas desde iCloud fallan por problemas de red. Revisa tu Wi-Fi o tu router."
-                         : "Las descargas nuevas están en espera hasta que vuelva la conexión.")
+                         ? String(localized: "Las descargas desde iCloud fallan por problemas de red. Revisa tu Wi-Fi o tu router.")
+                         : String(localized: "Las descargas nuevas están en espera hasta que vuelva la conexión."))
                     if let deadline = network.stopDeadline {
                         TimelineView(.periodic(from: .now, by: 1)) { ctx in
                             let left = max(0, Int(deadline.timeIntervalSince(ctx.date).rounded(.up)))
@@ -210,15 +211,15 @@ struct StopSection: View {
     var body: some View {
         Section {
             VStack(alignment: .leading, spacing: 8) {
-                Label(stop.reason == .networkLost ? "Deteniendo por falta de conexión" : "Deteniendo",
+                Label(stop.reason == .networkLost ? String(localized: "Deteniendo por falta de conexión") : String(localized: "Deteniendo"),
                       systemImage: stop.reason == .networkLost ? "wifi.slash" : "stop.circle")
                     .font(.headline)
 
                 TimelineView(.periodic(from: .now, by: 1)) { ctx in
                     ProgressView(value: stop.fraction) {
                         Text(stop.remaining == 0
-                             ? "Terminando…"
-                             : "Esperando a que terminen \(stop.remaining) de \(stop.total) operaciones en curso")
+                             ? String(localized: "Terminando…")
+                             : String(localized: "Esperando a que terminen \(stop.remaining) de \(stop.total) operaciones en curso"))
                     } currentValueLabel: {
                         Text(estimate(now: ctx.date)).monospacedDigit()
                     }
@@ -240,9 +241,9 @@ struct StopSection: View {
     private func estimate(now: Date) -> String {
         let elapsed = now.timeIntervalSince(stop.startedAt)
         let done = stop.total - stop.remaining
-        guard stop.remaining > 0 else { return "Listo" }
-        guard done > 0 else { return "Calculando… (\(Int(elapsed)) s)" }
+        guard stop.remaining > 0 else { return String(localized: "Listo") }
+        guard done > 0 else { return String(localized: "Calculando… (\(Int(elapsed)) s)") }
         let eta = max(1, elapsed / Double(done) * Double(stop.remaining))
-        return eta < 60 ? "≈ \(Int(eta.rounded(.up))) s restantes" : "≈ \(Int((eta / 60).rounded(.up))) min restantes"
+        return eta < 60 ? String(localized: "≈ \(Int(eta.rounded(.up))) s restantes") : String(localized: "≈ \(Int((eta / 60).rounded(.up))) min restantes")
     }
 }

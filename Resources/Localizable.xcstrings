@@ -1,0 +1,2999 @@
+{
+  "sourceLanguage": "es",
+  "strings": {
+    " Se detiene la copia.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " Copying stops."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " Se detiene la copia."
+          }
+        }
+      }
+    },
+    "%@ copiados": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ copied"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ copiados"
+          }
+        }
+      }
+    },
+    "%@ de %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ of %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ de %2$@"
+          }
+        }
+      }
+    },
+    "%@ · %@, %@ · copia anterior confirmada contra iCloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@, %@ · previous copy confirmed against iCloud"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · %2$@, %3$@ · copia anterior confirmada contra iCloud"
+          }
+        }
+      }
+    },
+    "%@ · %@, %@ · copiado y verificado": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · %@, %@ · copied and verified"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · %2$@, %3$@ · copiado y verificado"
+          }
+        }
+      }
+    },
+    "%@, %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@, %2$@"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "%@: detenido antes de terminar. No se borró de iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: stopped before finishing. Not deleted from iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: detenido antes de terminar. No se borró de iCloud."
+          }
+        }
+      }
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld archivos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld files"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld archivos"
+          }
+        }
+      }
+    },
+    "%lld copia(s) anterior(es) no tienen una firma válida en el registro (p. ej. hechas con una versión anterior de la app). Antes de borrarlas de iCloud se compararán con el original.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld previous copies have no valid signature in the log (e.g. made with an earlier version of the app). They will be compared with the original before being deleted from iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld copia(s) anterior(es) no tienen una firma válida en el registro (p. ej. hechas con una versión anterior de la app). Antes de borrarlas de iCloud se compararán con el original."
+          }
+        }
+      }
+    },
+    "%lld de %lld elementos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld of %lld items"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld de %2$lld elementos"
+          }
+        }
+      }
+    },
+    "%lld elementos encontrados · %lld por copiar · %lld ya copiados antes.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items found · %lld to copy · %lld already copied before."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld elementos encontrados · %2$lld por copiar · %3$lld ya copiados antes."
+          }
+        }
+      }
+    },
+    "%lld elementos registrados · %lld borrados de iCloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items logged · %lld deleted from iCloud"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld elementos registrados · %2$lld borrados de iCloud"
+          }
+        }
+      }
+    },
+    ".%@.partial": {
+      "shouldTranslate": false
+    },
+    ".icloud-offload/manifest.jsonl": {
+      "shouldTranslate": false
+    },
+    "1 archivo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 file"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 archivo"
+          }
+        }
+      }
+    },
+    "Abre la carpeta de destino en Finder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the destination folder in Finder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre la carpeta de destino en Finder"
+          }
+        }
+      }
+    },
+    "Abre la carpeta oculta .icloud-offload y selecciona manifest.jsonl": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the hidden .icloud-offload folder and selects manifest.jsonl"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre la carpeta oculta .icloud-offload y selecciona manifest.jsonl"
+          }
+        }
+      }
+    },
+    "Abrir destino en Finder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Destination in Finder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir destino en Finder"
+          }
+        }
+      }
+    },
+    "Acerca de iCloud Offload": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About iCloud Offload"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acerca de iCloud Offload"
+          }
+        }
+      }
+    },
+    "Actividad": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activity"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actividad"
+          }
+        }
+      }
+    },
+    "Al volver a ejecutar la app con el mismo disco, se usa para saltar lo ya copiado y para re-verificar los archivos antes de borrar nada de iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When you run the app again with the same drive, it is used to skip what was already copied and to re-verify the files before deleting anything from iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Al volver a ejecutar la app con el mismo disco, se usa para saltar lo ya copiado y para re-verificar los archivos antes de borrar nada de iCloud."
+          }
+        }
+      }
+    },
+    "Aquí verás cada archivo copiado, verificado y borrado.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Each copied, verified and deleted file will appear here."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aquí verás cada archivo copiado, verificado y borrado."
+          }
+        }
+      }
+    },
+    "Aún no hay registro en este disco": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No log on this drive yet"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aún no hay registro en este disco"
+          }
+        }
+      }
+    },
+    "Borrados %lld elemento/s de la fototeca.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleted %lld item(s) from the library."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrados %lld elemento/s de la fototeca."
+          }
+        }
+      }
+    },
+    "Borrados de iCloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleted from iCloud"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrados de iCloud"
+          }
+        }
+      }
+    },
+    "Borrar de iCloud después de verificar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete from iCloud after verifying"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar de iCloud después de verificar"
+          }
+        }
+      }
+    },
+    "Borrar en lotes de": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete in batches of"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borrar en lotes de"
+          }
+        }
+      }
+    },
+    "Calculando… (%lld s)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculating… (%lld s)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calculando… (%lld s)"
+          }
+        }
+      }
+    },
+    "Cambiar…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar…"
+          }
+        }
+      }
+    },
+    "Cancelar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar"
+          }
+        }
+      }
+    },
+    "Comparando la copia anterior con el original de iCloud": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparing the previous copy with the iCloud original"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comparando la copia anterior con el original de iCloud"
+          }
+        }
+      }
+    },
+    "Conexión inestable": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unstable connection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conexión inestable"
+          }
+        }
+      }
+    },
+    "Conexión restablecida. Se reanudan las descargas.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Connection restored. Downloads are resuming."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conexión restablecida. Se reanudan las descargas."
+          }
+        }
+      }
+    },
+    "Confirmación fallida · %@ · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmation failed · %@ · %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Confirmación fallida · %1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "Copiados antes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied before"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiados antes"
+          }
+        }
+      }
+    },
+    "Copiando %lld de %lld…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copying %lld of %lld…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Copiando %1$lld de %2$lld…"
+          }
+        }
+      }
+    },
+    "Copiando fotos y videos de iCloud a disco externo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copying photos and videos from iCloud to an external drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiando fotos y videos de iCloud a disco externo"
+          }
+        }
+      }
+    },
+    "Copiar detalle técnico": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Technical Details"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar detalle técnico"
+          }
+        }
+      }
+    },
+    "Copiar mensaje": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Message"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar mensaje"
+          }
+        }
+      }
+    },
+    "Copiar y liberar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy and Free Up"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar y liberar"
+          }
+        }
+      }
+    },
+    "Copiar y verificar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy and Verify"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar y verificar"
+          }
+        }
+      }
+    },
+    "Copiar, verificar y borrar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy, Verify and Delete"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar, verificar y borrar"
+          }
+        }
+      }
+    },
+    "Copyright": {
+      "shouldTranslate": false
+    },
+    "Creada por %@\nLicencia MIT · %@\n\n": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Created by %@\nMIT License · %@\n\n"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Creada por %1$@\nLicencia MIT · %2$@\n\n"
+          }
+        }
+      }
+    },
+    "Cristhian Ligio": {
+      "shouldTranslate": false
+    },
+    "Desactivado: solo copia y verifica (modo seguro).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off: only copies and verifies (safe mode)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desactivado: solo copia y verifica (modo seguro)."
+          }
+        }
+      }
+    },
+    "Descargando de iCloud y copiando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloading from iCloud and copying"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargando de iCloud y copiando"
+          }
+        }
+      }
+    },
+    "Descargas simultáneas": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simultaneous downloads"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Descargas simultáneas"
+          }
+        }
+      }
+    },
+    "Desde": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desde"
+          }
+        }
+      }
+    },
+    "Destino": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Destination"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Destino"
+          }
+        }
+      }
+    },
+    "Destino: %@ (%@, %@)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Destination: %@ (%@, %@)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Destino: %1$@ (%2$@, %3$@)"
+          }
+        }
+      }
+    },
+    "Detener": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stop"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detener"
+          }
+        }
+      }
+    },
+    "Detenido": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopped"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detenido"
+          }
+        }
+      }
+    },
+    "Detenido por falta de conexión": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopped: no connection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detenido por falta de conexión"
+          }
+        }
+      }
+    },
+    "Deteniendo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopping"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deteniendo"
+          }
+        }
+      }
+    },
+    "Deteniendo por falta de conexión": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopping: no connection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deteniendo por falta de conexión"
+          }
+        }
+      }
+    },
+    "Deteniendo…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopping…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deteniendo…"
+          }
+        }
+      }
+    },
+    "Detiene el proceso. Lo ya verificado queda registrado y no se borra nada más.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stops the process. Everything already verified stays logged and nothing else is deleted."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detiene el proceso. Lo ya verificado queda registrado y no se borra nada más."
+          }
+        }
+      }
+    },
+    "Disco externo válido.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Valid external drive."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disco externo válido."
+          }
+        }
+      }
+    },
+    "El acceso a Fotos es limitado. Concede acceso completo para procesar toda la fototeca.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos access is limited. Grant full access to process the whole library."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El acceso a Fotos es limitado. Concede acceso completo para procesar toda la fototeca."
+          }
+        }
+      }
+    },
+    "El archivo es demasiado grande para el formato del disco (FAT32 admite como máximo 4 GB). Usa un disco APFS o exFAT.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file is too large for the drive's format (FAT32 allows at most 4 GB). Use an APFS or exFAT drive."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El archivo es demasiado grande para el formato del disco (FAT32 admite como máximo 4 GB). Usa un disco APFS o exFAT."
+          }
+        }
+      }
+    },
+    "El disco destino ya no está disponible (¿se desconectó?). Se detiene la copia; no se borra nada pendiente.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The destination drive is no longer available (was it disconnected?). Copying stops; nothing pending is deleted."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El disco destino ya no está disponible (¿se desconectó?). Se detiene la copia; no se borra nada pendiente."
+          }
+        }
+      }
+    },
+    "El disco es de solo lectura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The drive is read-only."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El disco es de solo lectura."
+          }
+        }
+      }
+    },
+    "El disco externo es de solo lectura.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The external drive is read-only."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El disco externo es de solo lectura."
+          }
+        }
+      }
+    },
+    "El disco externo se ha llenado. Libera espacio o usa otro disco.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The external drive is full. Free up space or use another drive."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El disco externo se ha llenado. Libera espacio o usa otro disco."
+          }
+        }
+      }
+    },
+    "El disco se desconectó.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The drive was disconnected."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El disco se desconectó."
+          }
+        }
+      }
+    },
+    "El elemento no tiene recursos exportables.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The item has no exportable resources."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El elemento no tiene recursos exportables."
+          }
+        }
+      }
+    },
+    "Elegir disco…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Drive…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elegir disco…"
+          }
+        }
+      }
+    },
+    "Elemento borrado de iCloud: fecha y hora": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Item deleted from iCloud: date and time"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elemento borrado de iCloud: fecha y hora"
+          }
+        }
+      }
+    },
+    "Elemento copiado y verificado: archivos, tamaños y SHA-256": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Item copied and verified: files, sizes and SHA-256"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elemento copiado y verificado: archivos, tamaños y SHA-256"
+          }
+        }
+      }
+    },
+    "Elige primero una carpeta en un disco externo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First choose a folder on an external drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige primero una carpeta en un disco externo"
+          }
+        }
+      }
+    },
+    "Elige un disco externo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an external drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un disco externo"
+          }
+        }
+      }
+    },
+    "Elige un disco externo (o una carpeta dentro de él). No se admite el disco interno del Mac.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose an external drive (or a folder on it). The Mac's internal disk is not allowed."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un disco externo (o una carpeta dentro de él). No se admite el disco interno del Mac."
+          }
+        }
+      }
+    },
+    "Elige un disco para ver su registro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose a drive to see its log"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elige un disco para ver su registro"
+          }
+        }
+      }
+    },
+    "En el disco externo se guarda un registro con cada foto y video copiado: dónde quedó, su tamaño, su huella digital SHA-256 y, si corresponde, cuándo se borró de iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A log is kept on the external drive with every photo and video copied: where it went, its size, its SHA-256 fingerprint and, if applicable, when it was deleted from iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En el disco externo se guarda un registro con cada foto y video copiado: dónde quedó, su tamaño, su huella digital SHA-256 y, si corresponde, cuándo se borró de iCloud."
+          }
+        }
+      }
+    },
+    "En la fototeca": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In library"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En la fototeca"
+          }
+        }
+      }
+    },
+    "Error": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error"
+          }
+        }
+      }
+    },
+    "Error desconocido.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unknown error."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Error desconocido."
+          }
+        }
+      }
+    },
+    "Es un archivo de texto, `manifest.jsonl`, dentro de la carpeta oculta `.icloud-offload` del destino. Tiene una línea por evento:": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It is a text file, `manifest.jsonl`, inside the destination's hidden `.icloud-offload` folder. It has one line per event:"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es un archivo de texto, `manifest.jsonl`, dentro de la carpeta oculta `.icloud-offload` del destino. Tiene una línea por evento:"
+          }
+        }
+      }
+    },
+    "Es una imagen de disco (.dmg): sus datos se guardan en el disco interno. Elige un disco externo físico.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is a disk image (.dmg): its data is stored on the internal disk. Choose a physical external drive."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es una imagen de disco (.dmg): sus datos se guardan en el disco interno. Elige un disco externo físico."
+          }
+        }
+      }
+    },
+    "Es una unidad de red. Por fiabilidad de la verificación, solo se admiten discos externos conectados físicamente.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is a network drive. For reliable verification, only physically connected external drives are allowed."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es una unidad de red. Por fiabilidad de la verificación, solo se admiten discos externos conectados físicamente."
+          }
+        }
+      }
+    },
+    "Espacio insuficiente en el disco destino (quedan %@).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not enough space on the destination drive (%@ left)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacio insuficiente en el disco destino (quedan %@)."
+          }
+        }
+      }
+    },
+    "Espacio libre en el disco externo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free space on external drive"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacio libre en el disco externo"
+          }
+        }
+      }
+    },
+    "Espacio libre en este Mac": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free space on this Mac"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espacio libre en este Mac"
+          }
+        }
+      }
+    },
+    "Esperando a que terminen %lld de %lld operaciones en curso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for %lld of %lld operations in progress to finish"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Esperando a que terminen %1$lld de %2$lld operaciones en curso"
+          }
+        }
+      }
+    },
+    "Esperando conexión a internet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting for internet connection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esperando conexión a internet"
+          }
+        }
+      }
+    },
+    "Esta carpeta está en el disco interno del Mac. Elige una carpeta en un disco externo conectado (USB, Thunderbolt o tarjeta SD).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This folder is on the Mac's internal disk. Choose a folder on a connected external drive (USB, Thunderbolt or SD card)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta carpeta está en el disco interno del Mac. Elige una carpeta en un disco externo conectado (USB, Thunderbolt o tarjeta SD)."
+          }
+        }
+      }
+    },
+    "Esta carpeta no se puede usar como destino.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This folder can't be used as the destination."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esta carpeta no se puede usar como destino."
+          }
+        }
+      }
+    },
+    "Este elemento ya no existe en la fototeca; quizá se borró desde otro dispositivo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This item no longer exists in the library; it may have been deleted from another device."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este elemento ya no existe en la fototeca; quizá se borró desde otro dispositivo."
+          }
+        }
+      }
+    },
+    "FAT32 no admite archivos de más de 4 GB: los videos largos fallarán. Usa APFS o exFAT.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FAT32 doesn't support files larger than 4 GB: long videos will fail. Use APFS or exFAT."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "FAT32 no admite archivos de más de 4 GB: los videos largos fallarán. Usa APFS o exFAT."
+          }
+        }
+      }
+    },
+    "Fallidos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Failed"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fallidos"
+          }
+        }
+      }
+    },
+    "Formato": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Formato"
+          }
+        }
+      }
+    },
+    "Fotos no encuentra el archivo original de este elemento o está dañado. Ábrelo en Fotos para comprobarlo. No se borró nada.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos can't find this item's original file, or it is damaged. Open it in Photos to check. Nothing was deleted."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fotos no encuentra el archivo original de este elemento o está dañado. Ábrelo en Fotos para comprobarlo. No se borró nada."
+          }
+        }
+      }
+    },
+    "Fotos no permite borrar este elemento (por ejemplo, si pertenece a un álbum compartido).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos doesn't allow deleting this item (for example, if it belongs to a shared album)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fotos no permite borrar este elemento (por ejemplo, si pertenece a un álbum compartido)."
+          }
+        }
+      }
+    },
+    "Fotos no permite exportar este tipo de elemento. No se borró nada.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos doesn't allow exporting this kind of item. Nothing was deleted."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fotos no permite exportar este tipo de elemento. No se borró nada."
+          }
+        }
+      }
+    },
+    "Fotos no pudo completar la operación con este elemento. %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos couldn't complete the operation for this item. %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fotos no pudo completar la operación con este elemento. %@"
+          }
+        }
+      }
+    },
+    "Fotos y videos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos and videos"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fotos y videos"
+          }
+        }
+      }
+    },
+    "Hasta (incluido)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To (inclusive)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hasta (incluido)"
+          }
+        }
+      }
+    },
+    "Hay un lote de borrado esperando respuesta de Fotos. Si aparece el diálogo de macOS, respóndelo para terminar.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A deletion batch is waiting for Photos to respond. If the macOS dialog appears, answer it to finish."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hay un lote de borrado esperando respuesta de Fotos. Si aparece el diálogo de macOS, respóndelo para terminar."
+          }
+        }
+      }
+    },
+    "Inicia la copia": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts copying"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inicia la copia"
+          }
+        }
+      }
+    },
+    "La app no tiene permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app doesn't have permission to access Photos. Turn it on in System Settings › Privacy & Security › Photos."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La app no tiene permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos."
+          }
+        }
+      }
+    },
+    "La carpeta «%@» del disco destino apunta fuera de él (es un enlace simbólico). Por seguridad no se copia ahí; elimina o renombra ese enlace.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The folder “%@” on the destination drive points outside of it (it is a symbolic link). For safety nothing is copied there; delete or rename that link."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La carpeta «%@» del disco destino apunta fuera de él (es un enlace simbólico). Por seguridad no se copia ahí; elimina o renombra ese enlace."
+          }
+        }
+      }
+    },
+    "La conexión a internet es inestable: algunas descargas pueden fallar y se reintentarán.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The internet connection is unstable: some downloads may fail and will be retried."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La conexión a internet es inestable: algunas descargas pueden fallar y se reintentarán."
+          }
+        }
+      }
+    },
+    "La copia anterior de %@ no coincide con el original de iCloud; se copiará de nuevo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The previous copy of %@ doesn't match the iCloud original; it will be copied again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La copia anterior de %@ no coincide con el original de iCloud; se copiará de nuevo."
+          }
+        }
+      }
+    },
+    "La copia anterior de %@ no coincide con la registrada; se volverá a copiar.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The previous copy of %@ doesn't match the logged one; it will be copied again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La copia anterior de %@ no coincide con la registrada; se volverá a copiar."
+          }
+        }
+      }
+    },
+    "La copia de %@ ya no coincide con la registrada (¿se modificó o dañó el archivo?). No se borra de iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The copy of %@ no longer matches the logged one (was the file modified or damaged?). It won't be deleted from iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La copia de %@ ya no coincide con la registrada (¿se modificó o dañó el archivo?). No se borra de iCloud."
+          }
+        }
+      }
+    },
+    "La fototeca de Fotos no está disponible en este momento (¿está en un disco desconectado o se cambió de fototeca?).": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Photos library isn't available right now (is it on a disconnected drive, or was the library switched?)."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La fototeca de Fotos no está disponible en este momento (¿está en un disco desconectado o se cambió de fototeca?)."
+          }
+        }
+      }
+    },
+    "La operación se canceló en el diálogo de macOS.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The operation was cancelled in the macOS dialog."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La operación se canceló en el diálogo de macOS."
+          }
+        }
+      }
+    },
+    "La operación se interrumpió (Fotos se cerró o el Mac entró en reposo). %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The operation was interrupted (Photos quit or the Mac went to sleep). %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La operación se interrumpió (Fotos se cerró o el Mac entró en reposo). %@"
+          }
+        }
+      }
+    },
+    "La red está fallando": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The network is failing"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La red está fallando"
+          }
+        }
+      }
+    },
+    "La verificación SHA-256 falló para %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SHA-256 verification failed for %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La verificación SHA-256 falló para %@."
+          }
+        }
+      }
+    },
+    "Las copias a medias se descartan. Lo ya copiado y verificado se conserva y no se borra nada más de iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Partial copies are discarded. Everything already copied and verified is kept, and nothing else is deleted from iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las copias a medias se descartan. Lo ya copiado y verificado se conserva y no se borra nada más de iCloud."
+          }
+        }
+      }
+    },
+    "Las descargas desde iCloud están fallando por problemas de red. Si no se recupera en %lld s, se detendrá todo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloads from iCloud are failing because of network problems. If it doesn't recover within %lld s, everything will stop."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las descargas desde iCloud están fallando por problemas de red. Si no se recupera en %lld s, se detendrá todo."
+          }
+        }
+      }
+    },
+    "Las descargas desde iCloud fallan por problemas de red. Revisa tu Wi-Fi o tu router.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Downloads from iCloud are failing because of network problems. Check your Wi-Fi or router."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las descargas desde iCloud fallan por problemas de red. Revisa tu Wi-Fi o tu router."
+          }
+        }
+      }
+    },
+    "Las descargas nuevas están en espera hasta que vuelva la conexión.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New downloads are on hold until the connection is back."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las descargas nuevas están en espera hasta que vuelva la conexión."
+          }
+        }
+      }
+    },
+    "Las fechas no pueden ser futuras ni anteriores a 1900, y «Desde» no puede ser posterior a «Hasta».": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dates can't be in the future or before 1900, and “From” can't be after “To”."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las fechas no pueden ser futuras ni anteriores a 1900, y «Desde» no puede ser posterior a «Hasta»."
+          }
+        }
+      }
+    },
+    "Leyendo la fototeca…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading the library…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leyendo la fototeca…"
+          }
+        }
+      }
+    },
+    "Liberado": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freed"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liberado"
+          }
+        }
+      }
+    },
+    "Limitar por fecha de creación": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limit by creation date"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limitar por fecha de creación"
+          }
+        }
+      }
+    },
+    "Listo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo"
+          }
+        }
+      }
+    },
+    "Listo para empezar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready to start"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Listo para empezar"
+          }
+        }
+      }
+    },
+    "Lo borrado pasa a «Eliminado recientemente» en Fotos durante 30 días. Vacía esa carpeta para liberar el espacio en iCloud de inmediato.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleted items go to “Recently Deleted” in Photos for 30 days. Empty that folder to free up the iCloud space right away."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo borrado pasa a «Eliminado recientemente» en Fotos durante 30 días. Vacía esa carpeta para liberar el espacio en iCloud de inmediato."
+          }
+        }
+      }
+    },
+    "Lo registrado para %@ no corresponde con lo que hay en Fotos. No se borra de iCloud.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What is logged for %@ doesn't match what is in Photos. It won't be deleted from iCloud."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lo registrado para %@ no corresponde con lo que hay en Fotos. No se borra de iCloud."
+          }
+        }
+      }
+    },
+    "Los elementos borrados están en «Eliminado recientemente» de Fotos durante 30 días. Vacía esa carpeta para liberar el espacio en iCloud de inmediato.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleted items stay in “Recently Deleted” in Photos for 30 days. Empty that folder to free up the iCloud space right away."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los elementos borrados están en «Eliminado recientemente» de Fotos durante 30 días. Vacía esa carpeta para liberar el espacio en iCloud de inmediato."
+          }
+        }
+      }
+    },
+    "ManifestKey.loadOrCreate() == nil (Llavero no disponible o acceso denegado)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ManifestKey.loadOrCreate() == nil (Keychain unavailable or access denied)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ManifestKey.loadOrCreate() == nil (Llavero no disponible o acceso denegado)"
+          }
+        }
+      }
+    },
+    "Mostrar detalles técnicos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show Technical Details"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar detalles técnicos"
+          }
+        }
+      }
+    },
+    "Mostrar en Finder": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show in Finder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mostrar en Finder"
+          }
+        }
+      }
+    },
+    "Muestra u oculta el registro de actividad": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows or hides the activity log"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muestra u oculta el registro de actividad"
+          }
+        }
+      }
+    },
+    "Ningún disco elegido": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No drive chosen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ningún disco elegido"
+          }
+        }
+      }
+    },
+    "No hay espacio suficiente en el disco interno del Mac para que Fotos descargue este archivo de iCloud. Libera espacio y vuelve a intentarlo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There isn't enough space on the Mac's internal disk for Photos to download this file from iCloud. Free up space and try again."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay espacio suficiente en el disco interno del Mac para que Fotos descargue este archivo de iCloud. Libera espacio y vuelve a intentarlo."
+          }
+        }
+      }
+    },
+    "No hay permiso para escribir en la carpeta de destino.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is no permission to write to the destination folder."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No hay permiso para escribir en la carpeta de destino."
+          }
+        }
+      }
+    },
+    "No se borró el lote: %@ El borrado queda desactivado en esta ejecución; la copia continúa.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The batch wasn't deleted: %@ Deletion is turned off for this run; copying continues."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se borró el lote: %@ El borrado queda desactivado en esta ejecución; la copia continúa."
+          }
+        }
+      }
+    },
+    "No se borró nada; se volverá a intentar en la próxima ejecución.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing was deleted; it will be retried on the next run."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se borró nada; se volverá a intentar en la próxima ejecución."
+          }
+        }
+      }
+    },
+    "No se pudo descargar el archivo desde iCloud por un problema con la conexión a internet. %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file couldn't be downloaded from iCloud because of an internet connection problem. %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo descargar el archivo desde iCloud por un problema con la conexión a internet. %@"
+          }
+        }
+      }
+    },
+    "No se pudo escribir en el disco externo. ¿Se desconectó? %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't write to the external drive. Was it disconnected? %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo escribir en el disco externo. ¿Se desconectó? %@"
+          }
+        }
+      }
+    },
+    "No se pudo leer el disco: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't read the drive: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo leer el disco: %@"
+          }
+        }
+      }
+    },
+    "No se pudo leer o escribir en el disco externo. ¿Se desconectó? %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't read from or write to the external drive. Was it disconnected? %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo leer o escribir en el disco externo. ¿Se desconectó? %@"
+          }
+        }
+      }
+    },
+    "No se pudo usar la clave del Llavero para firmar el registro de copias. Se puede copiar, pero antes de borrar algo de iCloud se comprobará su copia contra el original.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Keychain key for signing the copy log couldn't be used. Copying works, but before anything is deleted from iCloud its copy will be checked against the original."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No se pudo usar la clave del Llavero para firmar el registro de copias. Se puede copiar, pero antes de borrar algo de iCloud se comprobará su copia contra el original."
+          }
+        }
+      }
+    },
+    "Ocultar detalles técnicos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hide Technical Details"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocultar detalles técnicos"
+          }
+        }
+      }
+    },
+    "Ocurrió un error inesperado al procesar este elemento. No se borró nada; se volverá a intentar en la próxima ejecución.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An unexpected error occurred while processing this item. Nothing was deleted; it will be retried on the next run."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ocurrió un error inesperado al procesar este elemento. No se borró nada; se volverá a intentar en la próxima ejecución."
+          }
+        }
+      }
+    },
+    "OffloadError.networkLost · sin conexión útil ≥ %lld s": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OffloadError.networkLost · no usable connection ≥ %lld s"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OffloadError.networkLost · sin conexión útil ≥ %lld s"
+          }
+        }
+      }
+    },
+    "Opciones": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Options"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opciones"
+          }
+        }
+      }
+    },
+    "Operación detenida.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Operation stopped."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Operación detenida."
+          }
+        }
+      }
+    },
+    "Preparando…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparando…"
+          }
+        }
+      }
+    },
+    "Proceso detenido. Lo ya copiado y verificado está a salvo; no se borró nada pendiente.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Process stopped. Everything already copied and verified is safe; nothing pending was deleted."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proceso detenido. Lo ya copiado y verificado está a salvo; no se borró nada pendiente."
+          }
+        }
+      }
+    },
+    "Progreso": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progress"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progreso"
+          }
+        }
+      }
+    },
+    "Puedes abrirlo con cualquier editor de texto. Para ver carpetas ocultas en Finder, pulsa ⌘⇧.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can open it with any text editor. To see hidden folders in Finder, press ⌘⇧."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Puedes abrirlo con cualquier editor de texto. Para ver carpetas ocultas en Finder, pulsa ⌘⇧."
+          }
+        }
+      }
+    },
+    "Queda poco espacio en el disco interno del Mac (%@). Fotos lo necesita para descargar temporalmente los originales de iCloud. Libera espacio y vuelve a iniciar: se reanudará donde se quedó.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Mac's internal disk is low on space (%@). Photos needs it to temporarily download originals from iCloud. Free up space and start again: it will resume where it left off."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Queda poco espacio en el disco interno del Mac (%@). Fotos lo necesita para descargar temporalmente los originales de iCloud. Libera espacio y vuelve a iniciar: se reanudará donde se quedó."
+          }
+        }
+      }
+    },
+    "Qué copiar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What to Copy"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qué copiar"
+          }
+        }
+      }
+    },
+    "Re-verificación SHA-256 fallida · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SHA-256 re-verification failed · %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Re-verificación SHA-256 fallida · %@"
+          }
+        }
+      }
+    },
+    "Recursos distintos entre registro y PhotoKit · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resources differ between log and PhotoKit · %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recursos distintos entre registro y PhotoKit · %@"
+          }
+        }
+      }
+    },
+    "Registro de copias": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Log"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro de copias"
+          }
+        }
+      }
+    },
+    "Registro de copias (manifiesto)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy log (manifest)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro de copias (manifiesto)"
+          }
+        }
+      }
+    },
+    "Reintentando (intento %lld de 3)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Retrying (attempt %lld of 3)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reintentando (intento %lld de 3)"
+          }
+        }
+      }
+    },
+    "Se crea al iniciar la primera copia.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It is created when the first copy starts."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se crea al iniciar la primera copia."
+          }
+        }
+      }
+    },
+    "Se detuvo todo porque no hubo conexión a internet durante más de %lld segundos. Lo ya copiado y verificado está a salvo en el disco; vuelve a iniciar cuando la conexión sea estable y continuará donde se quedó.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Everything stopped because there was no internet connection for more than %lld seconds. Everything already copied and verified is safe on the drive; start again when the connection is stable and it will continue where it left off."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se detuvo todo porque no hubo conexión a internet durante más de %lld segundos. Lo ya copiado y verificado está a salvo en el disco; vuelve a iniciar cuando la conexión sea estable y continuará donde se quedó."
+          }
+        }
+      }
+    },
+    "Se eliminaron %lld archivo(s) temporal(es) de una copia anterior interrumpida.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removed %lld temporary file(s) from a previous interrupted copy."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se eliminaron %lld archivo(s) temporal(es) de una copia anterior interrumpida."
+          }
+        }
+      }
+    },
+    "Se han detectado cortes o fallos de red en los últimos minutos. Algunas descargas pueden fallar; se reintentarán automáticamente y nada se borra sin verificar.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Network drops or failures were detected in the last few minutes. Some downloads may fail; they will be retried automatically and nothing is deleted without verifying."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se han detectado cortes o fallos de red en los últimos minutos. Algunas descargas pueden fallar; se reintentarán automáticamente y nada se borra sin verificar."
+          }
+        }
+      }
+    },
+    "Se perdió la conexión a internet mientras se descargaba el archivo de iCloud. %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The internet connection was lost while downloading the file from iCloud. %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se perdió la conexión a internet mientras se descargaba el archivo de iCloud. %@"
+          }
+        }
+      }
+    },
+    "Se perdió la conexión a internet. Las descargas nuevas quedan en espera; si no vuelve en %lld s, se detendrá todo.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The internet connection was lost. New downloads are on hold; if it isn't back within %lld s, everything will stop."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se perdió la conexión a internet. Las descargas nuevas quedan en espera; si no vuelve en %lld s, se detendrá todo."
+          }
+        }
+      }
+    },
+    "Se recibió un archivo vacío: %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An empty file was received: %@."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se recibió un archivo vacío: %@."
+          }
+        }
+      }
+    },
+    "Si la conexión no vuelve, se detendrán todas las copias y borrados en **%lld s**.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If the connection doesn't come back, all copies and deletions will stop in **%lld s**."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Si la conexión no vuelve, se detendrán todas las copias y borrados en **%lld s**."
+          }
+        }
+      }
+    },
+    "Sin actividad": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Activity"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin actividad"
+          }
+        }
+      }
+    },
+    "Sin conexión a internet": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No internet connection"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin conexión a internet"
+          }
+        }
+      }
+    },
+    "Sin permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No permission to access Photos. Turn it on in System Settings › Privacy & Security › Photos."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin permiso para acceder a Fotos. Actívalo en Ajustes del Sistema › Privacidad y seguridad › Fotos."
+          }
+        }
+      }
+    },
+    "Sirve para **reanudar** sin volver a copiar lo ya hecho, **comprobar en el futuro** que los archivos no se han dañado y **tener constancia** de qué se borró de iCloud. No lo borres mientras quieras conservar ese historial.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "It lets you **resume** without copying again what's already done, **check in the future** that the files haven't been damaged, and **keep a record** of what was deleted from iCloud. Don't delete it while you want to keep that history."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sirve para **reanudar** sin volver a copiar lo ya hecho, **comprobar en el futuro** que los archivos no se han dañado y **tener constancia** de qué se borró de iCloud. No lo borres mientras quieras conservar ese historial."
+          }
+        }
+      }
+    },
+    "Solicitando borrar %lld elemento/s de Fotos/iCloud (confirma en el diálogo de macOS)…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requesting deletion of %lld item(s) from Photos/iCloud (confirm in the macOS dialog)…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solicitando borrar %lld elemento/s de Fotos/iCloud (confirma en el diálogo de macOS)…"
+          }
+        }
+      }
+    },
+    "Solo fotos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos only"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo fotos"
+          }
+        }
+      }
+    },
+    "Solo se admiten discos externos conectados físicamente (USB, Thunderbolt o tarjeta SD). Nunca se copia al disco interno del Mac, ni a imágenes de disco o unidades de red.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only physically connected external drives are allowed (USB, Thunderbolt or SD card). Nothing is ever copied to the Mac's internal disk, disk images or network drives."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo se admiten discos externos conectados físicamente (USB, Thunderbolt o tarjeta SD). Nunca se copia al disco interno del Mac, ni a imágenes de disco o unidades de red."
+          }
+        }
+      }
+    },
+    "Solo se borrarán los elementos cuyos archivos se hayan copiado y verificado con SHA-256. macOS pedirá confirmación por cada lote de %lld. Los elementos irán a «Eliminado recientemente» durante 30 días.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Only items whose files were copied and verified with SHA-256 will be deleted. macOS will ask for confirmation for each batch of %lld. Items will go to “Recently Deleted” for 30 days."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo se borrarán los elementos cuyos archivos se hayan copiado y verificado con SHA-256. macOS pedirá confirmación por cada lote de %lld. Los elementos irán a «Eliminado recientemente» durante 30 días."
+          }
+        }
+      }
+    },
+    "Solo videos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Videos only"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Solo videos"
+          }
+        }
+      }
+    },
+    "Terminado": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finished"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminado"
+          }
+        }
+      }
+    },
+    "Terminado. Registro de copias: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finished. Copy log: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminado. Registro de copias: %@"
+          }
+        }
+      }
+    },
+    "Terminando…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finishing…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terminando…"
+          }
+        }
+      }
+    },
+    "Tipo": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tipo"
+          }
+        }
+      }
+    },
+    "Usar esta carpeta": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use This Folder"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar esta carpeta"
+          }
+        }
+      }
+    },
+    "Verificados": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verified"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificados"
+          }
+        }
+      }
+    },
+    "Verificando (SHA-256)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verifying (SHA-256)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificando (SHA-256)"
+          }
+        }
+      }
+    },
+    "creationDate < %@": {
+      "shouldTranslate": false
+    },
+    "creationDate >= %@": {
+      "shouldTranslate": false
+    },
+    "el SHA-256 del original no coincide con el registro: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the original's SHA-256 doesn't match the log: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "el SHA-256 del original no coincide con el registro: %@"
+          }
+        }
+      }
+    },
+    "el archivo del disco no coincide con el original: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the file on the drive doesn't match the original: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "el archivo del disco no coincide con el original: %@"
+          }
+        }
+      }
+    },
+    "formato desconocido": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "unknown format"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "formato desconocido"
+          }
+        }
+      }
+    },
+    "iCloud Offload": {
+      "shouldTranslate": false
+    },
+    "los recursos de Fotos no coinciden con el registro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "the Photos resources don't match the log"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "los recursos de Fotos no coinciden con el registro"
+          }
+        }
+      }
+    },
+    "mediaType == %d": {
+      "shouldTranslate": false
+    },
+    "mediaType == %d OR mediaType == %d": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "mediaType == %1$d OR mediaType == %2$d"
+          }
+        }
+      },
+      "shouldTranslate": false
+    },
+    "ruta no válida o archivo ausente: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "invalid path or missing file: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ruta no válida o archivo ausente: %@"
+          }
+        }
+      }
+    },
+    "un elemento": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "an item"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "un elemento"
+          }
+        }
+      }
+    },
+    "© %@ %@. Distribuida bajo la licencia MIT.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "© %@ %@. Distributed under the MIT License."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "© %1$@ %2$@. Distribuida bajo la licencia MIT."
+          }
+        }
+      }
+    },
+    "¿Borrar de iCloud tras verificar?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete from iCloud after verifying?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Borrar de iCloud tras verificar?"
+          }
+        }
+      }
+    },
+    "¿Qué es el registro de copias?": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What is the copy log?"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Qué es el registro de copias?"
+          }
+        }
+      }
+    },
+    "≈ %lld min restantes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %lld min left"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %lld min restantes"
+          }
+        }
+      }
+    },
+    "≈ %lld s restantes": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %lld s left"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ %lld s restantes"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

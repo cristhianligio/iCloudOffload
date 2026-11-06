@@ -11,15 +11,15 @@ public enum PhotoLibrary {
         var predicates: [NSPredicate] = []
         switch filter {
         case .all:
-            predicates.append(NSPredicate(format: "mediaType == %d OR mediaType == %d",
+            predicates.append(NSPredicate(format: String(localized: "mediaType == %d OR mediaType == %d"),
                                           PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue))
         case .photos:
-            predicates.append(NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue))
+            predicates.append(NSPredicate(format: String(localized: "mediaType == %d"), PHAssetMediaType.image.rawValue))
         case .videos:
-            predicates.append(NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue))
+            predicates.append(NSPredicate(format: String(localized: "mediaType == %d"), PHAssetMediaType.video.rawValue))
         }
-        if let from { predicates.append(NSPredicate(format: "creationDate >= %@", from as NSDate)) }
-        if let to { predicates.append(NSPredicate(format: "creationDate < %@", to as NSDate)) }
+        if let from { predicates.append(NSPredicate(format: String(localized: "creationDate >= %@"), from as NSDate)) }
+        if let to { predicates.append(NSPredicate(format: String(localized: "creationDate < %@"), to as NSDate)) }
         options.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
 
@@ -40,6 +40,18 @@ public enum PhotoLibrary {
             PHAssetChangeRequest.deleteAssets(assets)
         }
         return assets.count
+    }
+
+    /// Tipo y nombre original de cada recurso, por elemento, tal como los tiene Fotos ahora mismo.
+    /// Los elementos que ya no existen no aparecen en el resultado.
+    public static func resourceSummaries(for ids: [String]) -> [String: [ResourceSummary]] {
+        var out: [String: [ResourceSummary]] = [:]
+        PHAsset.fetchAssets(withLocalIdentifiers: ids, options: nil).enumerateObjects { asset, _, _ in
+            out[asset.localIdentifier] = PHAssetResource.assetResources(for: asset).map {
+                ResourceSummary(kind: kindName($0.type), originalFilename: $0.originalFilename)
+            }
+        }
+        return out
     }
 
     public static func mediaTypeName(_ t: PHAssetMediaType) -> String {
@@ -69,4 +81,9 @@ public enum PhotoLibrary {
         @unknown default: return "other\(t.rawValue)"
         }
     }
+}
+
+public struct ResourceSummary: Equatable, Sendable {
+    public var kind: String
+    public var originalFilename: String
 }

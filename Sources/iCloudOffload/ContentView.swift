@@ -60,13 +60,13 @@ struct ContentView: View {
                 Button {
                     if vm.deleteAfterVerify { confirmDelete = true } else { vm.start() }
                 } label: {
-                    Label(vm.deleteAfterVerify ? "Copiar y liberar" : "Copiar y verificar",
+                    Label(vm.deleteAfterVerify ? String(localized: "Copiar y liberar") : String(localized: "Copiar y verificar"),
                           systemImage: vm.deleteAfterVerify ? "icloud.and.arrow.down" : "externaldrive.badge.checkmark")
                         .labelStyle(.titleAndIcon)
                 }
                 .prominentActionStyle(destructive: vm.deleteAfterVerify)
                 .disabled(!vm.canStart)
-                .help(vm.canStart ? "Inicia la copia" : "Elige primero una carpeta en un disco externo")
+                .help(vm.canStart ? String(localized: "Inicia la copia") : String(localized: "Elige primero una carpeta en un disco externo"))
             }
         }
 
@@ -90,16 +90,16 @@ struct ContentView: View {
 
     private var statusSubtitle: String {
         let s = vm.summary
-        if vm.isStopping { return "Deteniendo…" }
+        if vm.isStopping { return String(localized: "Deteniendo…") }
         if vm.isRunning {
-            if vm.network.isOffline { return "Sin conexión a internet" }
-            return s.pending > 0 ? "Copiando \(s.processed) de \(s.pending)…" : "Preparando…"
+            if vm.network.isOffline { return String(localized: "Sin conexión a internet") }
+            return s.pending > 0 ? String(localized: "Copiando \(s.processed) de \(s.pending)…") : String(localized: "Preparando…")
         }
-        if s.stopReason == .networkLost { return "Detenido por falta de conexión" }
-        if s.cancelled { return "Detenido" }
-        if s.fatalError != nil { return "Error" }
-        if s.processed > 0 || s.deleted > 0 { return "Terminado" }
-        return vm.destination == nil ? "Elige un disco externo" : "Listo para empezar"
+        if s.stopReason == .networkLost { return String(localized: "Detenido por falta de conexión") }
+        if s.cancelled { return String(localized: "Detenido") }
+        if s.fatalError != nil { return String(localized: "Error") }
+        if s.processed > 0 || s.deleted > 0 { return String(localized: "Terminado") }
+        return vm.destination == nil ? String(localized: "Elige un disco externo") : String(localized: "Listo para empezar")
     }
 
     // MARK: Secciones
@@ -107,7 +107,7 @@ struct ContentView: View {
     private var destinationSection: some View {
         Section {
             LabeledContent {
-                Button(vm.destination == nil ? "Elegir disco…" : "Cambiar…") { vm.chooseDestination() }
+                Button(vm.destination == nil ? String(localized: "Elegir disco…") : String(localized: "Cambiar…")) { vm.chooseDestination() }
             } label: {
                 if let url = vm.destination {
                     Label {
@@ -222,13 +222,13 @@ struct ContentView: View {
             }
             Grid(alignment: .leading, horizontalSpacing: 28, verticalSpacing: 10) {
                 GridRow {
-                    stat("En la fototeca", s.totalInLibrary, symbol: "photo.on.rectangle")
-                    stat("Copiados antes", s.previouslyCopied, symbol: "clock.arrow.circlepath")
-                    stat("Verificados", s.verified, symbol: "checkmark.seal")
+                    stat(String(localized: "En la fototeca"), s.totalInLibrary, symbol: "photo.on.rectangle")
+                    stat(String(localized: "Copiados antes"), s.previouslyCopied, symbol: "clock.arrow.circlepath")
+                    stat(String(localized: "Verificados"), s.verified, symbol: "checkmark.seal")
                 }
                 GridRow {
-                    stat("Fallidos", s.failed, symbol: "exclamationmark.triangle", tint: s.failed > 0 ? .red : nil)
-                    stat("Borrados de iCloud", s.deleted, symbol: "icloud.slash")
+                    stat(String(localized: "Fallidos"), s.failed, symbol: "exclamationmark.triangle", tint: s.failed > 0 ? .red : nil)
+                    stat(String(localized: "Borrados de iCloud"), s.deleted, symbol: "icloud.slash")
                     VStack(alignment: .leading, spacing: 2) {
                         Label("Liberado", systemImage: "arrow.down.circle").font(.caption).foregroundStyle(.secondary)
                         Text(bytes(s.bytesDeleted)).font(.title3.monospacedDigit())
